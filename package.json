@@ -1,0 +1,61 @@
+{
+  "name": "sig-localiza",
+  "version": "1.0.0",
+  "description": "Primer proyecto",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://10.42.0.1:81/malejo/sig-localiza.git"
+  },
+  "keywords": [
+    "gruntJs"
+  ],
+  "author": "Marcelo",
+  "license": "GPL-1.0",
+  "devDependencies": {
+    "angular": "^1.5.7",
+    "angular-cookies": "^1.5.7",
+    "angular-message-format": "^1.5.7",
+    "angular-messages": "^1.5.7",
+    "angular-openlayers": "^1.0.1",
+    "angular-parse-ext": "^1.5.7",
+    "angular-resource": "^1.5.7",
+    "angular-sanitize": "^1.5.7",
+    "angular-touch": "^1.5.7",
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "d3": "^3.5.17",
+    "debug": "^2.2.0",
+    "express": "^4.14.0",
+    "fingerprintjs2": "^1.4.1",
+    "font-awesome": "^4.6.3",
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-qunit": "^1.2.0",
+    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-express": "^1.4.1",
+    "grunt-ng-constant": "^2.0.1",
+    "grunt-parallel": "^0.5.1",
+    "jade": "^1.11.0",
+    "jquery": "^3.0.0",
+    "jquery-ui": "^1.10.5",
+    "json-export-excel": "^1.0.8",
+    "json2csv": "^3.5.0",
+    "konfig": "^0.2.1",
+    "leaflet": "^0.7.7",
+    "load-grunt-tasks": "^3.5.0",
+    "lz-string": "^1.4.4",
+    "morgan": "^1.7.0",
+    "ng-csv": "^0.3.6",
+    "openlayers": "^3.16.0",
+    "pg": "^6.0.1",
+    "static-favicon": "^2.0.0-alpha",
+    "stylus": "^0.54.5"
+  }
+}
