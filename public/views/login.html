@@ -1,0 +1,175 @@
+<div class="navbar-fixed">
+  <nav>
+    <a href="/" class="brand-logo"><img src="img/png/laboratoriolinux.png" height="56px"></a>
+    <ul class="right hide-on-med-and-down">
+      <!-- Dropdown Trigger -->
+      <li ng-if="!session.id"><a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-action-input left"></i> Ingresar</a></li>
+      <li ng-if="!session.id"><a class="waves-effect waves-light modal-trigger" href="#modalReg"><i class="mdi-action-input left"></i> Registrarse</a></li>
+    </ul>
+    <ul id="slide-out" class="side-nav">
+      <!-- Dropdown Trigger -->
+      <li ng-if="!session.id"><a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-action-input left"></i> Ingresar</a></li>
+      <li ng-if="!session.id"><a class="waves-effect waves-light modal-trigger" href="#modalReg"><i class="mdi-action-input left"></i> Registrarse</a></li>
+    </ul>
+    <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+  </nav>
+</div>
+
+
+<!-- Modal Structure for Login -->
+<div id="modal1" class="modal bottom-sheet">
+  <div class="modal-content">
+    <div>
+      <form class="login-form" id="login" name="login">
+        <div class="row margin">
+          <div class="input-field col s12 m5">
+            <i class="mdi-social-person-outline prefix"></i>
+            <input class="validate" id="usuario" type="text" name="usuario">
+            <label for="usuario" class="center-align">Usuario (ver MAYÚS. y minús.)</label>
+          </div>
+          <div class="input-field col s12 m5">
+            <i class="mdi-action-lock-outline prefix"></i>
+            <input class="validate" id="password" type="password" name="password">
+            <label for="password" class="center-align">Contraseña</label>
+          </div>
+          <div class="input-field col s12 m2">
+            <a ng-click="api.login()" class="btn modal-close waves-effect waves-light green col s12">Ingresar</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Structure for Auto Register -->
+<div id="modalReg" class="modal">
+  <div class="modal-content">
+    <div>
+      <form class="login-form" id="registrarse" name="registrarse">
+        <div class="row margin">
+          <p ng-if="!session.latlng" class="red-text">Debe activar o dar permisos para compartir su ubicación</p>
+          <p>Datos para inicio de sessión:</p>
+          <div class="input-field col s12 m6">
+            <i class="mdi-social-person-outline prefix"></i>
+            <input class="validate" id="usuario" type="text" name="usuario">
+            <label for="usuario" class="center-align">Usuario (ver MAYÚS. y minús.)</label>
+          </div>
+          <div class="input-field col s12 m6">
+            <i class="mdi-action-lock-outline prefix"></i>
+            <input class="validate" id="password" type="password" name="password">
+            <label for="password" class="center-align">Contraseña</label>
+          </div>
+          <div class="input-field col s12 m12">
+            <i class="mdi-social-person-outline prefix"></i>
+            <input class="validate" id="negocio" type="text" name="negocio">
+            <label for="negocio" class="center-align">Descripción del negocio</label>
+          </div>
+          <hr>
+          <p>Datos necesarios para recuperar contraseña:</p>
+          <div class="input-field col s12 m6">
+            <i></i>
+            <input class="validate" id="siglas" type="text" name="siglas">
+            <label for="siglas" class="center-align">Siglas</label>
+          </div>
+          <div class="input-field col s12 m6">
+            <i></i>
+            <input class="validate" id="email" type="email" name="email">
+            <label for="email" data-error="No es válido" data-success="Ok" class="center-align">Email</label>
+          </div>
+          <div class="input-field col s12 m4">
+            <i></i>
+            <input class="validate" id="nombre" type="text" name="nombre">
+            <label for="nombre" data-error="No es válido" data-success="Ok" class="center-align">Nombres</label>
+          </div>
+          <div class="input-field col s12 m4">
+            <i></i>
+            <input class="validate" id="appaterno" type="text" name="appaterno">
+            <label for="appaterno" data-error="No es válido" data-success="Ok" class="center-align">Ap. Paterno</label>
+          </div>
+          <div class="input-field col s12 m4">
+            <i></i>
+            <input class="validate" id="apmaterno" type="text" name="apmaterno">
+            <label for="apmaterno" data-error="No es válido" data-success="Ok" class="center-align">Ap. Materno</label>
+          </div>
+          <div class="input-field col s4 m4">
+            <i></i>
+            <input class="validate" id="dia" type="number" name="dia">
+            <label for="dia" class="center-align">Día</label>
+          </div>
+          <div class="input-field col s4 m4">
+            <i></i>
+            <input class="validate" id="mes" type="number" name="mes">
+            <label for="mes" class="center-align">Mes</label>
+          </div>
+          <div class="input-field col s4 m4">
+            <i></i>
+            <input class="validate" id="ano" type="number" name="ano">
+            <label for="ano" class="center-align">Año</label>
+          </div>
+          <p>...</p>
+          <p ng-if="!session.latlng" class="red-text">Debe activar o dar permisos para compartir su ubicación</p>
+          <p ng-if="session.latlng" class="green-text">Si continua esta de acuerdo en registrar su ubicación</p>
+          <div class="input-field col s12 m6">
+            <a ng-click="api.registrarse()" class="btn waves-effect waves-light col s12 green">Registrarse</a>
+          </div>
+          <br>
+          <br>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Structure for Terminos y Condicines -->
+<div id="modalLeame" class="modal modal-fixed-footer">
+  <div class="modal-content">
+    <h5>
+      <center>
+        <i class="mdi-action-android"></i>
+        <i class="mdi-maps-layers"></i>
+        <i class="mdi-action-backup"></i>
+        <i class="mdi-action-extension"></i>
+        <i class="mdi-action-info"></i>
+        <i class="mdi-social-people"></i>
+        <i class="mdi-maps-directions-walk"></i>
+
+        <i class="mdi-action-question-answer"></i>
+        <i class="mdi-action-room"></i>
+        <i class="mdi-action-shopping-cart"></i>
+        <i class="mdi-action-thumb-up"></i>
+        <i class="mdi-hardware-phone-android"></i>
+        <i class="mdi-maps-map"></i>
+        <i class="mdi-maps-place"></i>
+        <br>
+        SIG
+      <center>
+    </h5>
+      <p style="text-align:justify">
+        Para el correcto funcionamiento de este sistema debe activar la ubicación en su dispositivo.
+        También debe dar permisos para compartir su ubicación en su navegador.
+      </p>
+      <p style="text-align:justify">
+        Al ingresar al sitio, esta de acuerdo en el registro de los datos de su ubicación, si no esta de acuerdo no ingrese en el sitio.
+      </p>
+      <br>
+  </div>
+  <div class="modal-footer">
+    <p style="text-align:left;display:inline;padding:2px 18px 2px;">
+      Marcelo
+    </p>
+    <a href="#modal1" class="modal-action modal-close waves-effect waves-green btn-flat blue modal-trigger">Aceptar</a>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  $( document ).ready(function(){
+    // Initialize collapse button
+    $(".button-collapse").sideNav({closeOnClick:true});
+    $('.modal-trigger').leanModal();
+    $('#modalLeame').openModal();
+    console.log('OK1');
+  });
+</script>

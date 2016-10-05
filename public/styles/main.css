@@ -1,0 +1,181 @@
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.container,
+.fondo {
+  width: 100%;
+  height: 100%;
+}
+
+#mimapa {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+}
+
+#header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 25px;
+  background-color: #abc;
+  opacity: .7;
+}
+
+#header .logo {
+  float: left;
+  width: 100px;
+}
+#header .titulo {
+  float: left;
+  margin: 0;
+  width: 150px;
+}
+#header .subtitulo {
+  float: left;
+  margin: 0;
+  width: 100px;
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  margin: 0 auto;
+  height: 15px;
+  width: 100%;
+  background-color: #efd;
+  opacity: .5;
+  font-size: 11px;
+  font-family: "Helvetica Neue",Arial,Helvetica,sans-serif;
+}
+
+
+
+
+.vista .contenido {
+  opacity: 1;
+}
+
+#modalMsg {
+  height: 80%;
+}
+#modalMsg .modal-content {
+  height: 100%;
+}
+
+.vista .chat {
+  background-color: #002d20;
+  opacity: .9;
+  margin-top: -24px;
+  margin-left: -24px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: auto;
+}
+.vista .chat .mensajes {
+  background-color: #002d20;
+  height:80%;
+  position: absolute;
+  width: 100%;
+  overflow: auto;
+  font-family: "Helvetica Neue",Arial,Helvetica,sans-serif;
+  font-size: 12px;
+}
+.vista .chat .mensajes .mensaje {
+  border: 1px solid #bbb;
+  padding: 2px;
+  margin: 2px;
+  border-radius: 8px;
+  background-color: #eee;
+  margin-right: 60px;
+}
+.vista .chat .mensajes .mensaje.yop {
+  margin-left: 60px;
+  margin-right: 2px;
+}
+.vista .chat .mensajes .mensaje .fecha {
+  text-align: right;
+  font-size: 9px;
+}
+.vista .enviarmensaje {
+  margin-left: -6px;
+  position: absolute;
+  width: 100%;
+}
+.vista .enviarmensaje #msg {
+  height: 40px;
+  margin: 0 1px;
+  width: 75%;
+  background: #fff;
+}
+.vista .enviarmensaje button,
+.vista .enviarmensaje a {
+  float: right;
+  padding: 2px 8px;
+  margin-right: 4px !important;
+  margin-top: 0px !important;
+  font-size: 10px;
+}
+
+.vista .lista.usuarios {
+  background-color: #fff;
+  position: absolute;
+  left: 10px;
+  top: 15%;
+  width: 250px;
+  height: 80%;
+  opacity: .6;
+  overflow: auto;
+}
+
+
+.vista .login {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #010;
+  text-align: center;
+  opacity: .8;
+}
+.vista .login form {
+  background-color: #4f4;
+  height: 160px;
+  width: 400px;
+  margin: 0 auto;
+  padding-top: 10px;
+  border-radius: 6px;
+  border: 4 solid #010;
+  opacity: 1;
+}
+.vista .login form input {
+  text-align: center;
+  width: 250px;
+}
+.vista .login form input[type=button] {
+  width: 100px;
+}
+
+
+
+.leaflet-top {
+  z-index: 990;
+  top: 58px;
+}
+.btn1, .btn-large1, .btn-flat {
+    padding: 0 1rem !important;
+    text-transform: lowercase;
+}
+img.circle.macx {
+  height: auto !important;
+  width: auto !important;
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: 25%;
+}

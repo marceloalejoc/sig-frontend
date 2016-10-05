@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="favicon.ico" />
+    <title>Localiza</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css">
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+    <!--Import Google Icon Font-->
+    <!--link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"-->
+    <link href="node_modules/materialize/icons/icon.css" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="node_modules/materialize/css/materialize.min.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="node_modules/materialize/css/material-custom.css"  media="screen,projection"/>
+    <style type="text/css">
+    .input-field {
+      margin-top: 0px;
+    }
+    .margin {
+      margin-bottom: 0px;
+    }
+    .input-field .prefix ~ label {
+      margin-left: 3rem;
+      width: calc(100% - 3rem) !important;
+    }
+    input {
+      height: 2rem !important;
+    }
+    input + label::after {
+      top: 40px !important;
+    }
+    .justify {
+      text-align: justify;
+    }
+    nav {
+      background-color: #004d40;
+    }
+    </style>
+  </head>
+
+<body ng-app="localizaFrontendApp">
+
+  <div class="container1" ng-controller="controladorPrincipal">
+
+
+
+
+
+    <div class="fondo" ng-controller="controladorLeaflet">
+      <leaflet id="mimapa" lf-center="center" markers="markers" layers="layers" defaults="defaults"></leaflet>
+      <div ng-view id="ng-view"></div>
+    </div>
+
+    <div id="footer" class="footer">
+      <center>
+        <span class='copyleft'>Localiza&copy; {{ getVersion() }}</span>
+        - <a href="http://macx.tk">Webmaster</a>
+      </center>
+    </div>
+
+  </div>
+
+  <div style="position:absolute; left:10px; top:150px; background-color:#fff; overflow:auto; height:150;">
+    <div id="midebug"></div>
+    <div id="miobs"></div>
+  </div>
+
+
+  <!-- build:js(.) scripts/vendor.js -->
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="node_modules/leaflet/dist/leaflet.js"></script>
+  <script src="node_modules/angular/angular.js"></script>
+  <script src="node_modules/angular-route/angular-route.js"></script>
+  <script src="node_modules/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
+  <script src="node_modules/materialize/js/materialize.min.js"></script>
+  <script src="node_modules/fingerprintjs2/dist/fingerprint2.min.js"></script>
+  <script src="node_modules/angular-cookies/angular-cookies.min.js"></script>
+  <!-- endbuild -->
+
+  <!-- build:js({.tmp,public}) scripts/scripts.js -->
+  <script src="scripts/app.js"></script>
+  <script src="scripts/config.js"></script>
+  <script src="scripts/controllers/main.js"></script>
+  <script src="scripts/controllers/leaflet.js"></script>
+  <script src="scripts/geolocation.js"></script>
+  <!-- endbuild -->
+
+  <script type="text/javascript">
+    $( document ).ready(function(){
+      $('.modal-trigger').leanModal();
+      console.log('OK');
+    });
+  </script>
+</body>
+</html>
