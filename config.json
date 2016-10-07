@@ -1,7 +1,7 @@
 {
   "development": {
     "name": "development",
-    "version": "1.0",
+    "version": "1.0.1",
     "localizaApi": "//192.168.3.234:3000",
     "localizaApiVersion": "/api/v1",
     "porcentajeMin": 3,
