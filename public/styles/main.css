@@ -57,6 +57,34 @@ html, body {
 
 
 
+/************/
+/* Cabecera */
+.input-field {
+  margin-top: 0px;
+}
+.margin {
+  margin-bottom: 0px;
+}
+.input-field .prefix ~ label {
+  margin-left: 3rem;
+  width: calc(100% - 3rem) !important;
+}
+input {
+  height: 2rem !important;
+}
+input + label::after {
+  top: 40px !important;
+}
+.justify {
+  text-align: justify;
+}
+nav {
+  background-color: #004d40;
+}
+
+
+
+
 
 .vista .contenido {
   opacity: 1;
@@ -108,20 +136,23 @@ html, body {
   margin-left: -6px;
   position: absolute;
   width: 100%;
+  text-align: right;
 }
 .vista .enviarmensaje #msg {
   height: 40px;
-  margin: 0 1px;
+  margin: 0;
+  margin-right: 2px;
   width: 75%;
   background: #fff;
 }
 .vista .enviarmensaje button,
 .vista .enviarmensaje a {
   float: right;
-  padding: 2px 8px;
+  padding: 0px 8px;
   margin-right: 4px !important;
   margin-top: 0px !important;
   font-size: 10px;
+  width: 22%;
 }
 
 .vista .lista.usuarios {
@@ -170,7 +201,7 @@ html, body {
 }
 .btn1, .btn-large1, .btn-flat {
     padding: 0 1rem !important;
-    text-transform: lowercase;
+    text-transform: capitalize;
 }
 img.circle.macx {
   height: auto !important;
