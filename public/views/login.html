@@ -1,15 +1,17 @@
+<div ng-controller="controladorLogin">
+
 <div class="navbar-fixed">
   <nav>
     <a href="/" class="brand-logo"><img src="img/png/laboratoriolinux.png" height="56px"></a>
     <ul class="right hide-on-med-and-down">
       <!-- Dropdown Trigger -->
       <li ng-if="!session.id"><a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-action-input left"></i> Ingresar</a></li>
-      <li ng-if="!session.id"><a class="waves-effect waves-light modal-trigger" href="#modalReg"><i class="mdi-action-input left"></i> Registrarse</a></li>
+      <li ng-if="ajustes.ubicacion"><a class="waves-effect waves-light modal-trigger" href="#modalReg"><i class="mdi-action-input left"></i> Registrarse</a></li>
     </ul>
     <ul id="slide-out" class="side-nav">
       <!-- Dropdown Trigger -->
       <li ng-if="!session.id"><a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-action-input left"></i> Ingresar</a></li>
-      <li ng-if="!session.id"><a class="waves-effect waves-light modal-trigger" href="#modalReg"><i class="mdi-action-input left"></i> Registrarse</a></li>
+      <li ng-if="ajustes.ubicacion"><a class="waves-effect waves-light modal-trigger" href="#modalReg"><i class="mdi-action-input left"></i> Registrarse</a></li>
     </ul>
     <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
   </nav>
@@ -157,19 +159,10 @@
   </div>
   <div class="modal-footer">
     <p style="text-align:left;display:inline;padding:2px 18px 2px;">
-      Marcelo
+      MACX&copy; <a href="mailto:malejo@macx.tk">Webmaster</a>
     </p>
-    <a href="#modal1" class="modal-action modal-close waves-effect waves-green btn-flat blue modal-trigger">Aceptar</a>
+    <a href="#modal1" class="modal-action modal-close waves-effect waves-green btn-flat blue modal-trigger" ng-click="ajustes.ubicacion=true">Aceptar</a>
   </div>
 </div>
 
-
-<script type="text/javascript">
-  $( document ).ready(function(){
-    // Initialize collapse button
-    $(".button-collapse").sideNav({closeOnClick:true});
-    $('.modal-trigger').leanModal();
-    $('#modalLeame').openModal();
-    console.log('OK1');
-  });
-</script>
+</div>

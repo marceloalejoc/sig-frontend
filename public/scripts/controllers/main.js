@@ -36,21 +36,24 @@ angular.module('localizaFrontendApp')
     };
 
     $scope.ajustes = {
-      ubicacion: true
+      ubicacion: false,
+      seguir: null
     }
 
     // Se ejecuta cuando hay cambios en la URL
     $scope.$on('$routeChangeSuccess', function() {
       if ($cookies.getObject('session')) {
         $scope.session = $cookies.getObject('session');
+        if ($scope.session.id) {
+          $scope.ajustes.ubicacion = true;
+        }
         if ($location.path()=='/login/') {
           $location.path('/home/')
         }
-        console.log('ROUTE',$cookies.getObject('session'),$scope.session);
         if ($routeParams.usuario) {
           cargarUsuarioInfo($routeParams.usuario);
         } else {
-          cargarUsuarios();
+          ;//cargarUsuarios();
         }
       }
       if (!$scope.session.id) {
@@ -95,7 +98,7 @@ angular.module('localizaFrontendApp')
           $scope.dato.mensajes = response[1].data;
           console.log('Usuario:',$scope.dato.usuarios);
         }, function(error) {
-          console.warn('Error al conectarse con la API: ',usuariosUrl);
+          console.warn('Error al conectarse con la API: ',postUsuarioUrl);
         });
       }
     };
@@ -132,11 +135,15 @@ angular.module('localizaFrontendApp')
             }
       var promises = [];
       var datos = {
-        'usuario1': $scope.session.usuario,
-        'usuario2': $scope.session.usuario,
+        'id1': $scope.session.id_usuario,
+        'user1': $scope.session.usuario,
         'latlng': latlong,
-        'idmobile': $scope.session.id,
+        'iddisp': $scope.session.id,
         'texto': msg
+      }
+      if($scope.ajustes.seguir) {
+        datos.id2 = $scope.ajustes.seguir.user.id_usuario;
+        datos.user2 = $scope.ajustes.seguir.user.usuario;
       }
       promises.push($http.post(postMensajeUrl+'/'+$scope.session.usuario+'/', datos, config ));
 
@@ -193,18 +200,27 @@ angular.module('localizaFrontendApp')
     }
 
     $scope.api.getUsuarios = function(usuario) {
+      var config = {
+                headers : {
+                    'Content-Type': 'application/json;charset=utf-8'
+                }
+            }
       var promises = [];
       var mensajes = document.getElementById('mensajes');
+      var datos = {
+        id: $scope.session.id_usuario,
+        usuario: $scope.session.usuario,
+        iddisp: $scope.session.id,
+        seguir: $scope.ajustes.seguir
+      }
       if($scope.session.usuario && mensajes) {
         promises.push($http.get(postUsuarioUrl, { 'usuario': 1 } ));
-        promises.push($http.get(postMensajeUrl+'/'+$scope.session.usuario+'/', {id:Math.random()} ));
 
         $q.all(promises).then(function(response) {
           $scope.dato.usuarios = response[0].data;
-          $scope.dato.mensajes = response[1].data;
           for (var id in $scope.dato.usuarios) {
             if ( $scope.dato.usuarios[id].lat && $scope.dato.usuarios[id].lng ) {
-              console.log('Usuario:',$scope.dato.usuarios[id]);
+              //console.log('Usuario:',$scope.dato.usuarios[id]);
               var usuario = $scope.api.userMarker($scope.dato.usuarios[id].usuario, $scope.dato.usuarios[id].id_dispositivo);
               usuario.lat = $scope.dato.usuarios[id].lat;
               usuario.lng = $scope.dato.usuarios[id].lng;
@@ -212,20 +228,78 @@ angular.module('localizaFrontendApp')
                 usuario.icon.iconUrl = $scope.dato.usuarios[id].img;
             }
           }
-          mensajes.innerHTML = "";
-          for (var id in $scope.dato.mensajes) {
-            var fecha = $scope.dato.mensajes[id].fecha.substring(0,10);
-            fecha += " "+$scope.dato.mensajes[id].hora.substring(0,5);
-            $scope.dato.mostrarMensajes($scope.dato.mensajes[id].usuario1, $scope.dato.mensajes[id].mensaje, fecha);
-          }
         }, function(error) {
-          console.warn('Error al conectarse con la API: ',usuariosUrl);
+          console.warn('Error al conectarse con la API: ',postUsuarioUrl);
         });
       }
     }
 
+    $scope.api.getMensajes = function(usuario) {
+      var config = {
+                headers : {
+                    'Content-Type': 'application/json;charset=utf-8'
+                }
+            }
+      var promises = [];
+      var mensajes = document.getElementById('mensajes');
+      var datos = {
+        id: $scope.session.id_usuario,
+        usuario: $scope.session.usuario,
+        iddisp: $scope.session.id,
+        seguir: $scope.ajustes.seguir
+      }
+      if($scope.session.usuario && mensajes) {
+        promises.push($http.post(postMensajeUrl+'/', datos, config ));
+
+        $q.all(promises).then(function(response) {
+          $scope.dato.mensajes = response[0].data;
+          mensajes.innerHTML = "";
+          for (var id in $scope.dato.mensajes) {
+            var fecha = $scope.dato.mensajes[id].fecha.substring(0,10);
+            fecha += " "+$scope.dato.mensajes[id].hora.substring(0,8);
+            $scope.dato.mostrarMensajes($scope.dato.mensajes[id].usuario1, $scope.dato.mensajes[id].mensaje, fecha);
+          }
+        }, function(error) {
+          console.warn('Error al conectarse con la API: ',postUsuarioUrl);
+        });
+      }
+    }
+
+    $scope.api.infoUsuario = function(user) {
+      if($scope.dato.infoUsuario && user.usuario == $scope.dato.infoUsuario.usuario) {
+        $('#modalUsuario').openModal();
+        return;
+      }
+      console.log(user);
+      var config = {
+                headers : {
+                    'Content-Type': 'application/json;charset=utf-8'
+                }
+            }
+      var datos = {
+        id: $scope.session.id_usuario,
+        usuario: $scope.session.usuario,
+        iddisp: $scope.session.id,
+        user: user
+      };
+      var promises = [];
+      promises.push( $http.post(postUsuarioUrl+'/'+user.usuario+'/info', datos, config) );
+      $q.all(promises).then(function(response) {
+        if(response[0].data.status==200) {
+          if(response[0].data.usuario) {
+            $scope.dato.infoUsuario = response[0].data;
+            console.log('RESP:',$scope.dato.infoUsuario);
+            $('#modalUsuario').openModal();
+          }
+        }
+      }, function(error) {
+        console.warn('Error info usuario');
+      });
+    }
+
 
   });
+
 
 /*
   var config1 = {
@@ -234,3 +308,15 @@ angular.module('localizaFrontendApp')
             }
         }
 */
+
+angular.module('localizaFrontendApp')
+  .controller('controladorLogin', function ($scope) {
+    if(!$scope.session.id) {
+      $( document ).ready(function(){
+        // Initialize collapse button
+        $(".button-collapse").sideNav({closeOnClick:true});
+        $('.modal-trigger').leanModal();
+        $('#modalLeame').openModal();
+      });
+    }
+  });

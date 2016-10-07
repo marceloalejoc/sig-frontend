@@ -45,6 +45,10 @@
     <div class="modal-content">
       <div class="chat">
         <div id="mensajes" class="mensajes"></div>
+        <div style="position:absolute;top:80%;" class="blue"><b>Mensajes con
+          <span ng-if="!ajustes.seguir">todos:</span>
+          <span ng-if="ajustes.seguir">{{ajustes.seguir.user.usuario}}:</span>
+        </b></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -159,16 +163,35 @@
           </div>
           <span class="title">{{ user.usuario }}</span>
           <p>{{user.nombre}} {{user.ap_paterno}}<br>
-            <a class="modal-action btn-flat cyan" title="Mensaje"><i class="material-icons">message</i></a>
+            <a class="modal-action modal-close btn-flat cyan" title="Mensaje" ng-click="api.chatUsuario(user)"><i class="material-icons">message</i></a>
             <a class="modal-action btn-flat blue" title="Pedido"><i class="material-icons">add_shopping_cart</i></a>
             <a class="modal-action modal-close btn-flat green" title="Seguir" ng-click="api.seguirUsuario(user)"><i class="material-icons">transfer_within_a_station</i></a>
           </p>
-          <a class="secondary-content" href="#!"><i class="material-icons">grade</i></a>
+          <a href="" class="secondary-content modal-trigger" ng-click="api.infoUsuario(user)"><i class="material-icons">grade</i></a>
         </li>
       </ul>
     </div>
     <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat blue">Cerrar</a>
+      <a href="" class="modal-action modal-close waves-effect waves-green btn-flat blue">Cerrar</a>
+    </div>
+  </div>
+
+  <div id="modalUsuario" class="modal modal-fixed-footer datos-usuario">
+    <div class="modal-content">
+      <div ng-if="dato.infoUsuario">
+        <h4>Información del usuario</h4>
+        <div><label>Usuario: </label><span class="title">{{dato.infoUsuario.usuario}}</span></div>
+        <div><label>Nombre: </label>{{dato.infoUsuario.nombre}} {{dato.infoUsuario.ap_paterno}} {{dato.infoUsuario.ap_materno}}</div>
+        <div ng-if="dato.infoUsuario.img"><label>Marcador: </label><img src="{{dato.infoUsuario.img}}"/></div>
+        <div ng-if="dato.infoUsuario.descripcion"><label>Descripción: </label>{{dato.infoUsuario.descripcion}}</div>
+        <div ng-if="dato.infoUsuario.dia"><label>Fecha: </label>{{dato.infoUsuario.dia}}-{{dato.infoUsuario.mes}}-{{dato.infoUsuario.ano}}</div>
+        <div ng-if="dato.infoUsuario.email"><label>Email: </label>{{dato.infoUsuario.email}}</div>
+        <div ng-if="dato.infoUsuario.siglas"><label>Siglas: </label>{{dato.infoUsuario.siglas}}</div>
+        <div ng-if="dato.infoUsuario.empresa"><label>Empresa: </label>{{dato.infoUsuario.empresa}}</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-action modal-close btn-flat blue">Cerrar</a>
     </div>
   </div>
 

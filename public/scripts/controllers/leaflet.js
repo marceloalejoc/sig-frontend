@@ -105,7 +105,6 @@ angular.module('localizaFrontendApp')
     // Crear markador de usuario
     $scope.api.userMarker = function(usu,iddisp) {
       var usuaux = usu;
-      console.log('ID:', 'HOLA'+null, usu, iddisp);
       if(iddisp)
         usuaux += iddisp;
       var usuario = $scope.markers[usuaux];
@@ -132,7 +131,7 @@ angular.module('localizaFrontendApp')
     //******************************************
     // Funciones para enviar ubicacion
     var options = {
-        enableHighAccuracy: true,
+        enableHighAccuracy: false,
         maximumAge: 20000,
         timeout: 15000
       };
@@ -154,7 +153,7 @@ angular.module('localizaFrontendApp')
         default:
           msg = "Error desconocido.";
       }
-      Materialize.toast('Error de ubicación:<br>'+msg, 2000)
+      Materialize.toast('Error de ubicación:<br>'+msg, 2000);
     }
 
     var ubicarMapa = function(objPosition) {
@@ -190,9 +189,10 @@ angular.module('localizaFrontendApp')
       if($scope.session.usuario) {
         usuario = $scope.api.userMarker($scope.session.usuario, $scope.session.id);
         if($scope.session.latlng) {
-          $scope.api.getUsuarios($scope.session.usuario);
+          //$scope.api.getUsuarios($scope.session.usuario);
         }
-        console.log([usuario.lat, usuario.lng]);
+        $scope.api.getUsuarios($scope.session.usuario);
+        $scope.api.getMensajes($scope.session.usuario);
       }
     }
 
@@ -269,6 +269,7 @@ angular.module('localizaFrontendApp')
     $scope.api.login = function() {
       var datos = {};
       var form = document.getElementById('login');
+      $scope.ajustes.ubicacion=true;
       datos.usuario = form.usuario.value;
       datos.password = form.password.value;
       datos.latlong = [$scope.center.lat,$scope.center.lng];
@@ -354,8 +355,24 @@ angular.module('localizaFrontendApp')
       var usuaux = usuario.usuario;
       if(usuario.id_dispositivo)
         usuaux += usuario.id_dispositivo;
-      if($scope.markers[usuaux])
+      if ($scope.markers[usuaux]) {
+        if ($scope.ajustes.seguir) {
+          $scope.ajustes.seguir.focus = false;
+        }
         $scope.markers[usuaux].focus = true;
+        $scope.ajustes.seguir = {
+          user: usuario,
+          marker:$scope.markers[usuaux]
+        }
+      }
+    }
+
+
+    $scope.api.chatUsuario = function(user) {
+      $scope.api.seguirUsuario(user);
+      $('#modalMsg').openModal();
+      $('#mensajes').html('');
+      $scope.api.getMensajes($scope.session.usuario);
     }
 
 
