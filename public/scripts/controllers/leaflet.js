@@ -9,7 +9,7 @@
  */
 angular.module('localizaFrontendApp')
   //.controller('controladorPrincipal', function ($scope, $http, $q, $routeParams, $location, ENV, Dpa, BreadcrumbFactory) {
-  .controller('controladorLeaflet', function ($scope, $http, $q, $routeParams, $location, ENV) {
+  .controller('controladorLeaflet', function ($scope, $http, $q, $routeParams, $location, ENV, Datos) {
 
     $scope.definedLayers = {
       osm: {
@@ -112,7 +112,7 @@ angular.module('localizaFrontendApp')
         $scope.markers[usuaux] = {
           lat: -16.5276043,
           lng: -68.1798767,
-          message: "<b>"+usu+"</b><br>",
+          message: "<b>"+usu+"</b>",
           focus: false,
           draggable: false,
           icon: {
@@ -130,15 +130,17 @@ angular.module('localizaFrontendApp')
 
     //******************************************
     // Funciones para enviar ubicacion
-    var options = {
-        enableHighAccuracy: false,
-        maximumAge: 20000,
-        timeout: 15000
+    $scope.ajustes.gpsOptions = {
+        enableHighAccuracy: true,
+        maximumAge: 14000,
+        timeout: 10000
       };
 
     var mostrarError = function(objError) {
       var msg = '';
       $scope.session.latlng = null;
+      $scope.dato.info = ' ';
+      $scope.dato.info = 'red-text';
       switch (objError.code)
       {
         case objError.PERMISSION_DENIED:
@@ -153,23 +155,28 @@ angular.module('localizaFrontendApp')
         default:
           msg = "Error desconocido.";
       }
-      Materialize.toast('Error de ubicación:<br>'+msg, 2000);
+      //Materialize.toast('Error de ubicación:<br>'+msg, 2000);
     }
 
     var ubicarMapa = function(objPosition) {
       $scope.session.latlng = [objPosition.coords.latitude, objPosition.coords.longitude];
-      Materialize.toast('Ubicado', 1000)
-      if($scope.session.usuario && $scope.session.latlng) {
-        $scope.api.postUbicacion($scope.session.latlng);
-        var usuario = $scope.api.userMarker($scope.session.usuario, $scope.session.id);
-        usuario.lat = $scope.session.latlng[0];
-        usuario.lng = $scope.session.latlng[1];
+      $scope.session.ubicado = true;
+      $scope.dato.info = ' ';
+      if(vTick==0) {
+        if($scope.session.usuario && $scope.session.latlng) {
+          console.log('POST',vTick);
+          $scope.api.postUbicacion($scope.session.latlng);
+          var usuario = $scope.api.userMarker($scope.session.usuario, $scope.session.id);
+          usuario.lat = $scope.session.latlng[0];
+          usuario.lng = $scope.session.latlng[1];
+        }
       }
     }
 
     var geolocalizar = function() {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(ubicarMapa, mostrarError, options);
+        $scope.dato.info = 'blue-text';
+        navigator.geolocation.getCurrentPosition(ubicarMapa, mostrarError, $scope.ajustes.gpsOptions);
       }
       else {
         console.log("El navegador no soporta Geolocalización.");
@@ -178,25 +185,30 @@ angular.module('localizaFrontendApp')
       return null;
     }
 
-    var vTempo;
+    var vTempo,vTick=0;
     var fTempo = function() {
       var usuario;
-      if($scope.ajustes.ubicacion) {
-        geolocalizar();
-      } else {
-        $scope.session.latlng = null;
-      }
-      if($scope.session.usuario) {
-        usuario = $scope.api.userMarker($scope.session.usuario, $scope.session.id);
-        if($scope.session.latlng) {
-          //$scope.api.getUsuarios($scope.session.usuario);
+        if($scope.ajustes.ubicacion) {
+          geolocalizar();
+        } else {
+          $scope.session.latlng = null;
+          $scope.session.ubicado = false;
+        }
+        if($scope.session.usuario) {
+          usuario = $scope.api.userMarker($scope.session.usuario, $scope.session.id);
+          if($scope.session.latlng) {
+            //$scope.api.getUsuarios($scope.session.usuario);
+          }
+          if(vTick==0)
+            $scope.api.getUsuarios($scope.session.usuario);
+          $scope.api.getMensajes($scope.session.usuario);
         }
         $scope.api.getUsuarios($scope.session.usuario);
         $scope.api.getMensajes($scope.session.usuario);
       }
     }
 
-    vTempo = setInterval(fTempo, 30000);
+    vTempo = setInterval(fTempo, 15000);
 
 
 
@@ -241,7 +253,7 @@ angular.module('localizaFrontendApp')
       tmsg = document.getElementById(msg);
       if (tmsg.value) {
         if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(ubicarMsgMapa, mostrarMsgError, options);
+          navigator.geolocation.getCurrentPosition(ubicarMsgMapa, mostrarMsgError, $scope.ajustes.gpsOptions);
         }
         else {
           console.log("El navegador no soporta Geolocalización.");
@@ -275,7 +287,8 @@ angular.module('localizaFrontendApp')
       datos.latlong = [$scope.center.lat,$scope.center.lng];
       new Fingerprint2().get(function(r,c){
         datos.iddisp = r; //a hash, representing your device fingerprint
-        if (datos.usuario!="" && datos.password!="") {
+        console.log('HASH: ',r,c);
+        if ( datos.usuario!="" ) {
           $scope.api.getUsuario(datos);
         }
       });
@@ -352,13 +365,13 @@ angular.module('localizaFrontendApp')
       $scope.center.lat = usuario.lat;
       $scope.center.lng = usuario.lng;
       console.log(usuario);
+      for (var id in $scope.markers) {
+        $scope.markers[id].focus = false;
+      }
       var usuaux = usuario.usuario;
       if(usuario.id_dispositivo)
         usuaux += usuario.id_dispositivo;
       if ($scope.markers[usuaux]) {
-        if ($scope.ajustes.seguir) {
-          $scope.ajustes.seguir.focus = false;
-        }
         $scope.markers[usuaux].focus = true;
         $scope.ajustes.seguir = {
           user: usuario,
@@ -372,9 +385,17 @@ angular.module('localizaFrontendApp')
       $scope.api.seguirUsuario(user);
       $('#modalMsg').openModal();
       $('#mensajes').html('');
+      $scope.dato.msFecha = '2016-01-01';
+      $scope.dato.msHora = '00:00:00';
       $scope.api.getMensajes($scope.session.usuario);
     }
 
+
+    $scope.api.pedidoUsuario = function(user) {
+      if(!$scope.dato.pedido || $scope.dato.pedido.user!=user)
+          $scope.dato.pedido = {user:user, productos:[]};
+      $('#modalPedido').openModal();
+    }
 
 
     // Funciones para DEBUG
