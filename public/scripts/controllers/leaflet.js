@@ -203,8 +203,10 @@ angular.module('localizaFrontendApp')
             $scope.api.getUsuarios($scope.session.usuario);
           $scope.api.getMensajes($scope.session.usuario);
         }
-        $scope.api.getUsuarios($scope.session.usuario);
-        $scope.api.getMensajes($scope.session.usuario);
+
+      vTick+=1;
+      if(vTick>=4) {
+        vTick=0
       }
     }
 
