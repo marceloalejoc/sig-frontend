@@ -3,37 +3,42 @@
     <a href="/" class="brand-logo"><i class="material-icons">android</i></a>
     <ul class="right hide-on-med-and-down">
       <!--li><a href="/"><i class="mdi-action-home left"></i> Inicio</a></li-->
-      <li ng-if="session.id"><a class="waves-effect waves-light modal-trigger" href="#modalMsg"><i class="mdi-communication-forum left"></i> Chat</a></li>
-      <li ng-if="session.id"><a href="#modalUsuarios" class="modal-trigger"><i class="mdi-social-group left"></i>Usuarios</a></li>
+      <!--li ng-if="session.id"><a class="waves-effect waves-light modal-trigger" href="#modalMsg"><i class="mdi-communication-forum left"></i> Chat</a></li-->
+      <li ng-if="session.id"><a href="#modalUsuarios" class="modal-trigger"><i class="mdi-social-people-outline left"></i>Usuarios</a></li>
+      <li ng-if="session.id"><a href="#modalGrupos" class="modal-trigger"><i class="mdi-social-group left"></i>Grupos</a></li>
       <!-- Dropdown Trigger -->
-      <li ng-if="session.id"><a class="dropdown-button" href="#" data-activates="dropdown1"><i class="mdi-social-person left"></i> {{session.usuario}}<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
+      <li ng-if="session.id"><a class="dropdown-button" href="#" data-activates="dropdown1"><i class="mdi-action-account-circle left"></i> {{session.usuario}}<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
     </ul>
     <ul id="slide-out" class="side-nav">
       <!--li><a href="/"><i class="mdi-action-home left"></i> Inicio</a></li-->
-      <li ng-if="session.id"><a class="waves-effect waves-light modal-trigger" href="#modalMsg"><i class="mdi-communication-forum left"></i> Chat</a></li>
-      <li ng-if="session.id"><a href="#modalUsuarios" class="modal-trigger"><i class="mdi-social-group left"></i>Usuarios</a></li>
+      <!--li ng-if="session.id"><a class="waves-effect waves-light modal-trigger" href="#modalMsg"><i class="mdi-communication-forum left"></i> Chat</a></li-->
+      <li ng-if="session.id"><a href="#modalUsuarios" class="modal-trigger"><i class="mdi-social-people-outline left"></i>Usuarios</a></li>
+      <li ng-if="session.id"><a href="#modalGrupos" class="modal-trigger"><i class="mdi-social-group left"></i>Grupos</a></li>
       <!-- Dropdown Trigger -->
       <li class="divider"></li>
-      <li ng-if="session.id"><a class="dropdown-button" href="#" data-activates="dropdown2"><i class="mdi-social-person left"></i> {{session.usuario}}<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
-      <li><a href="#modalPedido" class="modal-trigger green-text"><i class="mdi-action-add-shopping-cart left"></i>Pedidos</a></li>
+      <li ng-if="session.id"><a class="dropdown-button" href="#" data-activates="dropdown2"><i class="mdi-action-account-circle left"></i> {{session.usuario}}<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
+      <li><a href="" class="green-text" ng-click="api.openProductos()"><i class="mdi-notification-play-install left"></i>Mis Productos</a></li>
+      <li><a href="" class="green-text" ng-click="api.openPedidos()"><i class="mdi-action-shopping-cart left"></i>Pedidos</a></li>
       <li><a href="#modalAjustes" class="modal-trigger green-text"><i class="mdi-action-settings left"></i>Ajustes</a></li>
-      <li><a href="#!" class="green-text" ng-click="api.logout()"><i class="mdi-action-exit-to-app left"></i>Salir</a></li>
+      <li><a href="#!" class="green-text" ng-click="api.logout()"><i class="mdi-action-open-in-new left"></i>Salir</a></li>
       <li class="divider"></li>
     </ul>
     <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
   </nav>
   <!-- Dropdown Structure -->
   <ul id="dropdown1" class="dropdown-content">
-    <li><a href="#modalPedido" class="modal-trigger"><i class="mdi-action-add-shopping-cart left"></i>Pedidos</a></li>
+    <li><a href="" ng-click="api.openProductos()"><i class="mdi-notification-play-install left"></i>Mis Productos</a></li>
+    <li><a href="" ng-click="api.openPedidos()"><i class="mdi-action-shopping-cart left"></i>Pedidos</a></li>
     <li><a href="#modalAjustes" class="modal-trigger"><i class="mdi-action-settings left"></i>Ajustes</a></li>
     <li class="divider"></li>
-    <li><a href="#!" ng-click="api.logout()"><i class="mdi-action-exit-to-app left"></i>Salir</a></li>
+    <li><a href="#!" ng-click="api.logout()"><i class="mdi-action-open-in-new left"></i>Salir</a></li>
   </ul>
   <ul id="dropdown2" class="dropdown-content">
-    <li><a href="#">Pedidos</a></li>
-    <li><a href="#modalAjustes" class="modal-trigger">Ajustes</a></li>
+    <li><a href="" ng-click="api.openProductos()"><i class="mdi-notification-play-install left"></i>Mis Productos</a></li>
+    <li><a href="" ng-click="api.openPedidos()"><i class="mdi-action-shopping-cart left"></i>Pedidos</a></li>
+    <li><a href="#modalAjustes" class="modal-trigger"><i class="mdi-action-settings left"></i>Ajustes</a></li>
     <li class="divider"></li>
-    <li><a href="#!" ng-click="api.logout()">Salir</a></li>
+    <li><a href="#!" ng-click="api.logout()"><i class="mdi-action-open-in-new left"></i>Salir</a></li>
   </ul>
 
 </div>
@@ -78,6 +83,22 @@
           </ul>
         </div>
       </div>
+      <!-- GPS -->
+      <div style="position:relative; min-height:60px; padding-right: 64px;">
+        <b>Alta precisión gps.</b>
+        <p>Si desactiva esta opción solo podra ver la ubicación de los usuarios que le tienen confianza.<br>
+          Para enviar mensajes o realizar pedidos debe activar esta opción.</p>
+        <div class="fixed-action-btn horizontal" style="position:absolute; top:0; right:4px;">
+          <a class="btn-floating btn-large">
+            <i ng-class="{'mdi-navigation-check green':ajustes.gpsOptions.enableHighAccuracy, 'mdi-navigation-close red':!ajustes.gpsOptions.enableHighAccuracy}">menu</i>
+          </a>
+          <ul>
+            <li><a class="btn-floating green" ng-click="ajustes.gpsOptions.enableHighAccuracy=true"><i class="mdi-navigation-check">si</i></a></li>
+            <li><a class="btn-floating red" ng-click="ajustes.gpsOptions.enableHighAccuracy=false"><i class="mdi-navigation-close">no</i></a></li>
+          </ul>
+        </div>
+      </div>
+
       <!-- Imagen ->
       <div style="position:relative; min-height:60px; padding-right: 64px;">
         <b>Cambiar imagen de marcador.</b>
@@ -154,7 +175,7 @@
 
   <div id="modalUsuarios" class="modal modal-fixed-footer lista-usuarios">
     <div class="modal-content">
-      <h4>Usuarios</h4>
+      <h5>Usuarios</h5>
       <ul class="collection">
         <li class="collection-item avatar" ng-repeat="user in dato.usuarios">
           <div class="text-center">
@@ -162,12 +183,14 @@
             <img ng-if="user.img" class="circle" alt="" src="{{user.img}}">
           </div>
           <span class="title">{{ user.usuario }}</span>
-          <p>{{user.nombre}} {{user.ap_paterno}}<br>
-            <a class="modal-action modal-close btn-flat cyan" title="Mensaje" ng-click="api.chatUsuario(user)"><i class="material-icons">message</i></a>
-            <a class="modal-action btn-flat blue" title="Pedido"><i class="material-icons">add_shopping_cart</i></a>
-            <a class="modal-action modal-close btn-flat green" title="Seguir" ng-click="api.seguirUsuario(user)"><i class="material-icons">transfer_within_a_station</i></a>
+          <p>{{user.nombre}} {{user.ap_paterno}}</p>
+          <p>
+            <a class="modal-action modal-close btn-flat cyan-text" title="Mensaje" ng-click="api.chatUsuario(user)"><i class="material-icons">message</i></a>
+            <a class="modal-action modal-close btn-flat blue-text" title="Pedido" ng-click="api.pedidoUsuario(user)"><i class="material-icons">add_shopping_cart</i></a>
+            <a class="modal-action modal-close btn-flat green-text" title="Seguir" ng-click="api.seguirUsuario(user)"><i class="material-icons">transfer_within_a_station</i></a>
           </p>
-          <a href="" class="secondary-content modal-trigger" ng-click="api.infoUsuario(user)"><i class="material-icons">grade</i></a>
+          <p style="text-align:right;font-size:10px">{{user.fecha}} {{user.hora}}</p>
+          <a href="" class="secondary-content" ng-click="api.infoUsuario(user)"><i class="material-icons">grade</i></a>
         </li>
       </ul>
     </div>
@@ -179,11 +202,34 @@
   <div id="modalUsuario" class="modal modal-fixed-footer datos-usuario">
     <div class="modal-content">
       <div ng-if="dato.infoUsuario">
+        <h4>Información de {{dato.infoUsuario.usuario}}</h4>
+        <ul class="collection">
+          <li class="collection-item avatar">
+            <div class="text-center">
+              <img ng-if="dato.infoUsuario.img" class="circle" alt="" src="{{dato.infoUsuario.img}}">
+            </div>
+            <div class="title"><label>Nombres: </label><br>{{dato.infoUsuario.nombre}} {{dato.infoUsuario.ap_paterno}} {{dato.infoUsuario.ap_materno}}</div>
+            <div ng-if="dato.infoUsuario.descripcion"><label>Descripción del negocio: </label><br>{{dato.infoUsuario.descripcion}}</div>
+            <div ng-if="dato.infoUsuario.email"><label>Email: </label><br>{{dato.infoUsuario.email}}</div>
+            <div ng-if="dato.infoUsuario.siglas"><label>Siglas: </label><br>{{dato.infoUsuario.siglas}}</div>
+            <div ng-if="dato.infoUsuario.empresa"><label>Empresa: </label><br>{{dato.infoUsuario.empresa}}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-action modal-close btn-flat blue">Cerrar</a>
+    </div>
+  </div>
+
+  <div id="modalUsuario1" class="modal modal-fixed-footer datos-usuario">
+    <div class="modal-content">
+      <div ng-if="dato.infoUsuario">
         <h4>Información del usuario</h4>
         <div><label>Usuario: </label><span class="title">{{dato.infoUsuario.usuario}}</span></div>
         <div><label>Nombre: </label>{{dato.infoUsuario.nombre}} {{dato.infoUsuario.ap_paterno}} {{dato.infoUsuario.ap_materno}}</div>
         <div ng-if="dato.infoUsuario.img"><label>Marcador: </label><img src="{{dato.infoUsuario.img}}"/></div>
-        <div ng-if="dato.infoUsuario.descripcion"><label>Descripción: </label>{{dato.infoUsuario.descripcion}}</div>
+        <div ng-if="dato.infoUsuario.descripcion"><label>Descripción del negocio: </label>{{dato.infoUsuario.descripcion}}</div>
         <div ng-if="dato.infoUsuario.dia"><label>Fecha: </label>{{dato.infoUsuario.dia}}-{{dato.infoUsuario.mes}}-{{dato.infoUsuario.ano}}</div>
         <div ng-if="dato.infoUsuario.email"><label>Email: </label>{{dato.infoUsuario.email}}</div>
         <div ng-if="dato.infoUsuario.siglas"><label>Siglas: </label>{{dato.infoUsuario.siglas}}</div>
@@ -195,37 +241,181 @@
     </div>
   </div>
 
+
+
+
+  <div id="modalPedidos" class="modal modal-fixed-footer lista_pedidos">
+    <div class="modal-content">
+      <h5>Pedidos realizados</h5>
+      <div>
+        <ul class="collection">
+          <li class="collection-item avatar" ng-repeat="pedido in dato.pedidos">
+            <div class="col s6"><label>Estado: </label> {{pedido.estado}}</div>
+            <div class="col s6">{{pedido.usuario2}}</div>
+            <div class="col s12"><label>Detalles: </label> {{pedido.detalle}}</div>
+            <div style="text-align:right;font-size:10px;">{{pedido.fecha}} {{pedido.hora}}</div>
+            <a href="" class="secondary-content" title="Detalle" ng-click="api.pedidoDetalle(pedido)"><i class="mdi-action-shopping-cart"></i></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat blue">Cerrar</a>
+    </div>
+  </div>
+
+
+
+
   <div id="modalPedido" class="modal modal-fixed-footer form_pedido">
     <div class="modal-content">
-      <h5 style="margin-top:-20px;">Pedido informal</h5>
-      <form>
+      <h5 style="margin-top:-20px;">Pedido</h5>
+      <form id="formPedido">
         <div class="row margin">
           <div class="input-field col s12 m6">
             <i class="mdi-social-person-outline prefix"></i>
-            <input class="validate" id="nombres" type="text" name="nombres">
+            <input class="validate" id="nombres" type="text" name="nombres" value="{{session.nombre}} {{session.ap_paterno}}" >
             <label for="nombres" data-error="No es válido" data-success="Ok" class="center-align">Nombre completo</label>
-          </div>
+          </div><br>
           <div class="input-field col s12 m6">
             <i class="mdi-social-person-outline prefix"></i>
-            <input class="validate" id="email" type="email" name="email">
+            <input class="validate" id="email" type="email" name="email" value="{{session.email}}" >
             <label for="email" data-error="No es válido" data-success="Ok" class="center-align">Correo electrónico</label>
-          </div>
+          </div><br>
           <div class="input-field col s12 m12">
             <i class="mdi-social-person-outline prefix"></i>
             <input class="validate" id="direccion" type="text" name="direccion">
             <label for="direccion" data-error="No es válido" data-success="Ok" class="center-align">Dirección</label>
-          </div>
+          </div><br>
           <div class="input-field col s12 m12">
-            <textarea id="detalles" name="detalles" style="height:200px"></textarea>
+            <textarea id="detalles" name="detalles" style="height:100px"></textarea>
             <label for="detalles" data-error="No es válido" data-success="Ok" class="center-align">Detalles del pedido</label>
           </div>
+        </div>
+        <p>Lista de Productos:</p>
+        <div id="list-pedido" class="row margin">
+          <div ng-repeat="prod in dato.pedido.productos">
+            <div><a ng-click="api.pedidoRemoveProd($index,prod)" href="" class="btn-floating right red"><i class="mdi-content-remove"></i></a></div>
+            <div><label>Cantidad: </label> <input type="number" id="cantidad" name="cantidad" ng-model="prod.pcant" style="width:50px"/></div>
+            <div><label>Detalle: </label> {{prod.detalle}}</div>
+            <div><label>Precio: </label> {{prod.precio}}</div>
+            <div><label>Total: </label> {{prod.pcant * prod.precio}}</div>
+            <hr>
+          </div>
+        </div>
+        <a ng-click="api.pedidoListProd()" href="" class="waves-effect waves-yellow btn-floating right"><i class="mdi-content-add"></i></a>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <a href="" ng-click="api.pedidoEnviar('formPedido')" class="modal-action modal-close waves-effect waves-green btn-flat blue">Enviar</a>
+    </div>
+  </div>
+
+
+  <!-- Modal Structure for productos -->
+  <div id="modalPedidoProductos" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h5 class="title">Productos disponibles</h5>
+      <div class="row1">
+        <ul class="collection">
+          <li class="collection-item" ng-repeat="prod in dato.productos">
+            <div><label>Producto: </label> {{prod.nombre}}<div class="right">{{prod.codigo}}</div></div>
+            <div style="float:left;width:50%"><label>Precio: </label> {{prod.precio}}</div>
+            <div style="float:left;width:50%"><label>Cantidad: </label> {{prod.cantidad}}</div>
+            <div>{{prod.detalle}}</div>
+            <div style="margin-left:-54px;float:left">
+              <a href="" ng-click="api.pedidoAddProd($index,prod)" class="btn-flat blue"> <i class="mdi-content-add"></i></a>
+            </div>
+            <div style="text-align:right;font-size:10px;line-heigth:10px">{{prod.fecha}} {{prod.hora}}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-footer">
+    </div>
+  </div>
+
+  <!-- Modal Structure for productos -->
+  <div id="modalProductos" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h5 class="title">Productos</h5>
+      <div class="row1">
+        <ul class="collection">
+          <li class="collection-item" ng-repeat="prod in dato.productos">
+            <div><label>Producto: </label> {{prod.nombre}}<div class="right">{{prod.codigo}}</div></div>
+            <div style="float:left;width:50%"><label>Precio: </label> {{prod.precio}}</div>
+            <div style="float:left;width:50%"><label>Cantidad: </label> {{prod.cantidad}}</div>
+            <div>{{prod.detalle}}</div>
+            <div>
+              <a href="" ng-click="api.productoEdit($index,prod,'formProducto')" class="btn-flat blue"> <i class="mdi-image-edit"></i> </a>
+              <a href="" ng-click="api.productoDelete($index,prod)" class="btn-flat orange"> <i class="mdi-action-delete"></i> </a>
+            </div>
+            <div style="text-align:right;font-size:10px;">{{prod.fecha}} {{prod.hora}}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a ng-click="api.productoAdd()" href="" class="waves-effect waves-yellow btn-floating right"><i class="mdi-content-add"></i></a>
+      <!--a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat blue">Cerrar</a-->
+    </div>
+  </div>
+
+  <!-- Modal Structure for producto -->
+  <div id="modalProducto" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h5 class="title">Adicionar Producto</h5>
+      <form id="formProducto" class="row margin">
+        <input type="hidden" id="divindex" name="divindex" value="">
+        <input type="hidden" id="id_prod" name="id_prod" value="">
+        <div>
+          <input type="text" id="codigo" name="codigo" value="">
+          <label for="codigo">Codigo de producto</label>
+        </div>
+        <div>
+          <input type="text" id="nombre" name="nombre" value="">
+          <label for="nombre">Nombre</label>
+        </div>
+        <div>
+          <textarea id="detalle" name="detalle" style="height:100px;"></textarea>
+          <label for="detalle">Detalle del producto</label>
+        </div>
+        <div class="col s6">
+          <input type="number" id="precio" name="precio" value="">
+          <label for="precio">Precio</label>
+        </div>
+        <div class="col s6">
+          <input type="number" id="cantidad" name="cantidad" value="">
+          <label for="cantidad">Cantidad</label>
         </div>
       </form>
     </div>
     <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat blue">Enviar</a>
+      <a ng-click="api.postProducto('formProducto')" href="" class="waves-effect waves-yellow btn-flat green right">Aceptar</a>
+      <!--a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat blue">Cerrar</a-->
     </div>
   </div>
+
+
+
+  <!-- Modal Structure for grupos -->
+  <div id="modalGrupos" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h5>Grupos</h5>
+      <div id="lista_grupos">
+        <ul class="collection">
+          <li class="collection-item" ng-repeat="grupo in dato.grupos">
+            <p>grupo.nombre</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <!--a ng-click="api.openProducto()" href="" class="waves-effect waves-yellow btn-floating right"><i class="mdi-content-add"></i></a-->
+      <a href="" class="modal-action modal-close waves-effect waves-green btn-flat blue">Cerrar</a>
+    </div>
+  </div>
+
 
 </div>
 

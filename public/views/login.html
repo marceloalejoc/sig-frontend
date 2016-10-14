@@ -6,12 +6,14 @@
     <ul class="right hide-on-med-and-down">
       <!-- Dropdown Trigger -->
       <li ng-if="!session.id"><a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-action-input left"></i> Ingresar</a></li>
-      <li ng-if="ajustes.ubicacion"><a class="waves-effect waves-light modal-trigger" href="#modalReg"><i class="mdi-action-input left"></i> Registrarse</a></li>
+      <li ng-show="session.latlng"><a class="waves-effect waves-light modal-trigger" href="#modalReg"><i class="mdi-action-description left"></i> Registrarse</a></li>
+      <li><a href="#modalAjustes" class="modal-trigger"><i class="mdi-action-settings left"></i>Ajustes</a></li>
     </ul>
     <ul id="slide-out" class="side-nav">
       <!-- Dropdown Trigger -->
       <li ng-if="!session.id"><a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-action-input left"></i> Ingresar</a></li>
-      <li ng-if="ajustes.ubicacion"><a class="waves-effect waves-light modal-trigger" href="#modalReg"><i class="mdi-action-input left"></i> Registrarse</a></li>
+      <li ng-if="session.latlng"><a class="waves-effect waves-light modal-trigger" href="#modalReg"><i class="mdi-action-description left"></i> Registrarse</a></li>
+      <li><a href="#modalAjustes" class="modal-trigger"><i class="mdi-action-settings left"></i>Ajustes</a></li>
     </ul>
     <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
   </nav>
@@ -19,22 +21,25 @@
 
 
 <!-- Modal Structure for Login -->
-<div id="modal1" class="modal bottom-sheet">
+<!--div id="modal1" class="modal bottom-sheet"-->
+<div id="modal1" class="modal">
   <div class="modal-content">
     <div>
       <form class="login-form" id="login" name="login">
         <div class="row margin">
-          <div class="input-field col s12 m5">
+          <div class="input-field col s12 m6">
             <i class="mdi-social-person-outline prefix"></i>
             <input class="validate" id="usuario" type="text" name="usuario">
-            <label for="usuario" class="center-align">Usuario (ver MAYÚS. y minús.)</label>
+            <label for="usuario" class="center-align">Usuario (Requerido)</label>
+            <p>Se distingue las mayúsculas y minúsculas.</p>
           </div>
-          <div class="input-field col s12 m5">
+          <div class="input-field col s12 m6">
             <i class="mdi-action-lock-outline prefix"></i>
             <input class="validate" id="password" type="password" name="password">
-            <label for="password" class="center-align">Contraseña</label>
+            <label for="password" class="center-align">Contraseña (Opcional)</label>
+            <p>La contraseña es para ingresar desde cualquier dispositivo.</p>
           </div>
-          <div class="input-field col s12 m2">
+          <div class="input-field col s12 m12">
             <a ng-click="api.login()" class="btn modal-close waves-effect waves-light green col s12">Ingresar</a>
           </div>
         </div>
@@ -55,17 +60,20 @@
           <div class="input-field col s12 m6">
             <i class="mdi-social-person-outline prefix"></i>
             <input class="validate" id="usuario" type="text" name="usuario">
-            <label for="usuario" class="center-align">Usuario (ver MAYÚS. y minús.)</label>
+            <label for="usuario" class="center-align">Usuario*</label>
+            <p>Verificar mayúsculas y minúsculas</p>
           </div>
           <div class="input-field col s12 m6">
             <i class="mdi-action-lock-outline prefix"></i>
             <input class="validate" id="password" type="password" name="password">
-            <label for="password" class="center-align">Contraseña</label>
+            <label for="password" class="center-align">Contraseña*</label>
+            <p>...</p>
           </div>
           <div class="input-field col s12 m12">
             <i class="mdi-social-person-outline prefix"></i>
             <input class="validate" id="negocio" type="text" name="negocio">
             <label for="negocio" class="center-align">Descripción del negocio</label>
+            <p>...</p>
           </div>
           <hr>
           <p>Datos necesarios para recuperar contraseña:</p>
@@ -73,26 +81,31 @@
             <i></i>
             <input class="validate" id="siglas" type="text" name="siglas">
             <label for="siglas" class="center-align">Siglas</label>
+            <p>...</p>
           </div>
           <div class="input-field col s12 m6">
             <i></i>
             <input class="validate" id="email" type="email" name="email">
             <label for="email" data-error="No es válido" data-success="Ok" class="center-align">Email</label>
+            <p>...</p>
           </div>
           <div class="input-field col s12 m4">
             <i></i>
             <input class="validate" id="nombre" type="text" name="nombre">
             <label for="nombre" data-error="No es válido" data-success="Ok" class="center-align">Nombres</label>
+            <p>...</p>
           </div>
           <div class="input-field col s12 m4">
             <i></i>
             <input class="validate" id="appaterno" type="text" name="appaterno">
-            <label for="appaterno" data-error="No es válido" data-success="Ok" class="center-align">Ap. Paterno</label>
+            <label for="appaterno" data-error="No es válido" data-success="Ok" class="center-align">Paterno</label>
+            <p>Apellido paterno</p>
           </div>
           <div class="input-field col s12 m4">
             <i></i>
             <input class="validate" id="apmaterno" type="text" name="apmaterno">
-            <label for="apmaterno" data-error="No es válido" data-success="Ok" class="center-align">Ap. Materno</label>
+            <label for="apmaterno" data-error="No es válido" data-success="Ok" class="center-align">Materno</label>
+            <p>Apellido materno</p>
           </div>
           <div class="input-field col s4 m4">
             <i></i>
@@ -164,5 +177,81 @@
     <a href="#modal1" class="modal-action modal-close waves-effect waves-green btn-flat blue modal-trigger" ng-click="ajustes.ubicacion=true">Aceptar</a>
   </div>
 </div>
+
+
+
+<!-- Modal Structure for ajustes -->
+<div id="modalAjustes" class="modal modal-fixed-footer">
+  <div class="modal-content">
+    <!-- Posicion -->
+    <div style="position:relative; min-height:60px; padding-right: 64px;">
+      <b>Ubicación del dispositivo.</b>
+      <p>Si desactiva esta opción solo podra ver la ubicación de los usuarios que le tienen confianza.<br>
+        Para enviar mensajes o realizar pedidos debe activar esta opción.</p>
+      <div class="fixed-action-btn horizontal" style="position:absolute; top:0; right:4px;">
+        <a class="btn-floating btn-large">
+          <i ng-class="{'mdi-navigation-check green':ajustes.ubicacion, 'mdi-navigation-close red':!ajustes.ubicacion}">menu</i>
+        </a>
+        <ul>
+          <li><a class="btn-floating green" ng-click="ajustes.ubicacion=true"><i class="mdi-navigation-check">si</i></a></li>
+          <li><a class="btn-floating red" ng-click="ajustes.ubicacion=false"><i class="mdi-navigation-close">no</i></a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- GPS -->
+    <div style="position:relative; min-height:60px; padding-right: 64px;">
+      <b>Alta precisión gps.</b>
+      <p>Si desactiva esta opción solo podra ver la ubicación de los usuarios que le tienen confianza.<br>
+        Para enviar mensajes o realizar pedidos debe activar esta opción.</p>
+      <div class="fixed-action-btn horizontal" style="position:absolute; top:0; right:4px;">
+        <a class="btn-floating btn-large">
+          <i ng-class="{'mdi-navigation-check green':ajustes.gpsOptions.enableHighAccuracy, 'mdi-navigation-close red':!ajustes.gpsOptions.enableHighAccuracy}">menu</i>
+        </a>
+        <ul>
+          <li><a class="btn-floating green" ng-click="ajustes.gpsOptions.enableHighAccuracy=true"><i class="mdi-navigation-check">si</i></a></li>
+          <li><a class="btn-floating red" ng-click="ajustes.gpsOptions.enableHighAccuracy=false"><i class="mdi-navigation-close">no</i></a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Imagen ->
+    <div style="position:relative; min-height:60px; padding-right: 64px;">
+      <b>Cambiar imagen de marcador.</b>
+      <p>.</p>
+      <div class="fixed-action-btn horizontal" style="position:absolute; top:0; right:4px;">
+        <a class="btn-floating btn-large white">
+          <img ng-if="!session.img" class="circle" alt="" src="img/png/position_marker.png" height="100%">
+          <img ng-if="session.img" class="circle" alt="" src="session.img" height="100%">
+        </a>
+        <ul>
+          <li><a class="btn-floating red"><i class="material-icons"><img src="img/png/position_marker.png"/></i></a></li>
+          <li><a class="btn-floating yellow darken-1"><img src="img/png/carro_repartidor.png" height="100%"/></a></li>
+          <li><a class="btn-floating green"><img src="img/png/carro_basurero.png" height="100%"/></a></li>
+          <li><a class="btn-floating blue"><img src="img/png/carro_repartidor.png" height="100%"/></a></li>
+        </ul>
+      </div>
+    </div>
+    <!- Posicion ->
+    <div style="position:relative; min-height:60px; padding-right: 64px;">
+      Enviar ubicacion del dispositivo
+      <div class="fixed-action-btn horizontal" style="position:absolute; top:0; right:4px;">
+        <a class="btn-floating btn-large red">
+          <i class="material-icons">menu</i>
+        </a>
+        <ul>
+          <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
+          <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+          <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+          <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+        </ul>
+      </div>
+    </div>
+    <!- Imagen -->
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat blue">Aceptar</a>
+  </div>
+</div>
+
 
 </div>
