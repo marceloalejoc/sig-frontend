@@ -47,12 +47,17 @@ html, body {
   position: absolute;
   bottom: 0;
   margin: 0 auto;
-  height: 15px;
+  height: 16px;
   width: 100%;
   background-color: #efd;
-  opacity: .5;
+  opacity: .9;
   font-size: 11px;
   font-family: "Helvetica Neue",Arial,Helvetica,sans-serif;
+}
+
+#footer i {
+  font-size: 14px;
+  float: left;
 }
 
 
@@ -71,6 +76,7 @@ html, body {
 }
 input {
   height: 2rem !important;
+  margin-bottom: 2px !important;
 }
 input + label::after {
   top: 40px !important;
@@ -192,7 +198,19 @@ nav {
 .vista .login form input[type=button] {
   width: 100px;
 }
+form.login-form p {
+  margin-top: 2px;
+  padding-left: 43px;
+  font-size: 10px;
+}
 
+
+.vista .lista_pedidos .pedidos {
+  width: 100%;
+  height: 95%;
+  overflow: auto;
+  border-top: 1px dotted #bbb;
+}
 
 
 .leaflet-top {
@@ -202,6 +220,8 @@ nav {
 .btn1, .btn-large1, .btn-flat {
     padding: 0 1rem !important;
     text-transform: capitalize;
+    height: 25px;
+    line-height: 25px;
 }
 img.circle.macx {
   height: auto !important;
@@ -209,4 +229,35 @@ img.circle.macx {
   max-width: 50px;
   max-height: 50px;
   border-radius: 25%;
+}
+
+
+.modal-content h5 {
+  margin: 0;
+}
+
+#modalUsuarios .modal-content,
+#modalProductos .modal-content,
+#modalPedidos .modal-content,
+#modalPedidoProductos .modal-content {
+  padding: 6px;
+}
+#modalUsuarios h5 {
+  margin: 0;
+}
+
+#modalGrupos h5 {
+  margin: 0;
+}
+#modalGrupos .modal-content {
+  padding: 6px;
+  height: calc(100% - 45px);
+}
+#modalGrupos .modal-footer {
+  height: 45px;
+}
+
+.collection .collection-item {
+  padding-left: 60px;
+  padding-right: 6px;
 }
