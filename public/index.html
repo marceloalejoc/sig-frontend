@@ -34,9 +34,13 @@
     </div>
 
     <div id="footer" class="footer">
+      <i class="mdi-action-android"></i>
+      <i class="mdi-hardware-phone-android"></i>
+      <i class="mdi-action-backup" ng-class="{'green-text':ajustes.ubicacion}"></i>
+      <i class="mdi-maps-place" ng-class="{'green-text':session.latlng}"></i>
+      <i class="mdi-device-gps-fixed {{dato.info}}"></i>
       <center>
-        <span class='copyleft'>SIG - Localiza&copy; {{ getVersion() }}</span>
-        - <a href="http://macx.tk">Webmaster</a>
+        <span class='copyleft'>SIG - Localiza&copy; {{ getVersion() }}</span> - <a href="http://macx.tk">Webmaster</a>
       </center>
     </div>
 
