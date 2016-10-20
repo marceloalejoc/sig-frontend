@@ -64,25 +64,34 @@ html, body {
 
 /************/
 /* Cabecera */
-.input-field {
-  margin-top: 0px;
+.modal-content .input-field {
+  /*margin-top: 0px;*/
 }
-.margin {
+.modal-content .margin {
   margin-bottom: 0px;
 }
-.input-field .prefix ~ label {
+.modal-content .input-field .prefix ~ label {
   margin-left: 3rem;
   width: calc(100% - 3rem) !important;
 }
-input {
+.modal-content input {
   height: 2rem !important;
   margin-bottom: 2px !important;
 }
-input + label::after {
+.modal-content input + label::after {
   top: 40px !important;
 }
-.justify {
+.modal-content .justify {
   text-align: justify;
+}
+[type="radio"]:not(:checked), [type="radio"]:checked {
+    left: auto;
+    opacity: 1;
+    position: relative;;
+}
+.leaflet-control label {
+    color: #000;
+    font-size: 12px;
 }
 nav {
   background-color: #004d40;
@@ -239,6 +248,7 @@ img.circle.macx {
 #modalUsuarios .modal-content,
 #modalProductos .modal-content,
 #modalPedidos .modal-content,
+#modalMisPedidos .modal-content,
 #modalPedidoProductos .modal-content {
   padding: 6px;
 }
@@ -260,4 +270,26 @@ img.circle.macx {
 .collection .collection-item {
   padding-left: 60px;
   padding-right: 6px;
+}
+.collection .collection-item.avatar .secondary-content {
+    top: 4px;
+    right: 8px;
+}
+.collection-item label {
+  font-weight: bold;
+}
+.collection-item .precio,
+.collection-item .cantidad {
+  width: 48%;
+  float: left;
+}
+.collection-item .detalle,
+.marca-pedido .detalle {
+  white-space:pre-wrap
+}
+.collection-item .fecha,
+.marca-pedido .fecha {
+  text-align: right;
+  font-size: 10px;
+  font-weight: bold;
 }
