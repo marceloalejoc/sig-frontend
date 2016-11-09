@@ -3,7 +3,7 @@
 [Prototipo del Sistema planteado](https://sig.macx.tk/)
 Actualmente en desarrollo
 
-### Backend del Sistema de Información Geográfica para el control de pedidos y entrega de productos, aplicando la ubicación geoespacial
+### Frontend del Sistema de Información Geográfica para el control de pedidos y entrega de productos, aplicando la ubicación geoespacial
 
 Este Sistema implementado junto al [Backend](https://github.com/marceloalejoc/sig-backend) permite realizar las siguientes acciones:
 
