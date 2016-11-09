@@ -1,10 +1,9 @@
 {
   "development": {
     "name": "development",
-    "version": "1.0.1",
-    "localizaApi": "//192.168.3.234:3000",
+    "version": "1.0.2",
+    "localizaApi": "//192.168.3.33/back",
     "localizaApiVersion": "/api/v1",
-    "porcentajeMin": 3,
     "color": "eee"
   },
   "production": {
@@ -12,7 +11,6 @@
     "version": "1.0",
     "localizaApi": "//192.168.122.4/localiza-api",
     "localizaApiVersion": "/api/v1",
-    "porcentajeMin": 3,
     "color": "eee"
   }
 }
