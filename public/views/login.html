@@ -5,17 +5,17 @@
     <a href="/" class="brand-logo"><img src="img/png/laboratoriolinux.png" height="56px"></a>
     <ul class="right hide-on-med-and-down">
       <!-- Dropdown Trigger -->
-      <li ng-if="!m.session.id"><a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-action-input left"></i> Ingresar</a></li>
-      <li ng-show="m.session.latlng"><a class="waves-effect waves-light modal-trigger" href="#modalReg"><i class="mdi-action-description left"></i> Registrarse</a></li>
+      <li><a href="#modal1" class="modal-trigger"><i class="mdi-action-input left"></i> Ingresar</a></li>
+      <li><a href="#modalReg" class="modal-trigger"><i class="mdi-action-description left"></i> Registrarse</a></li>
       <li><a href="#modalAjustes" class="modal-trigger"><i class="mdi-action-settings left"></i>Ajustes</a></li>
     </ul>
     <ul id="slide-out1" class="side-nav">
       <!-- Dropdown Trigger -->
-      <li ng-if="!m.session.id"><a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-action-input left"></i> Ingresar</a></li>
-      <li ng-if="m.session.latlng"><a class="waves-effect waves-light modal-trigger" href="#modalReg"><i class="mdi-action-description left"></i> Registrarse</a></li>
+      <li><a href="#modal1"  class="modal-trigger"><i class="mdi-action-input left"></i> Ingresar</a></li>
+      <li><a href="#modalReg" class="modal-trigger"><i class="mdi-action-description left"></i> Registrarse</a></li>
       <li><a href="#modalAjustes" class="modal-trigger"><i class="mdi-action-settings left"></i>Ajustes</a></li>
     </ul>
-    <a href="#" data-activates="slide-out1" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+    <a href="" data-activates="slide-out1" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
   </nav>
 </div>
 
@@ -29,16 +29,16 @@
         <div class="row margin">
           <div class="input-field col s12 m6">
             <i class="mdi-social-person-outline prefix"></i>
-            <input class="validate" id="usuario" type="text" name="usuario">
+            <input class="validate" id="usuario" type="text" name="usuario" length="30">
             <label for="usuario" class="center-align">Usuario (Requerido)</label>
-            <p>Se distingue las mayúsculas y minúsculas.</p>
           </div>
+          <p>Se distingue las mayúsculas y minúsculas.</p>
           <div class="input-field col s12 m6">
             <i class="mdi-action-lock-outline prefix"></i>
-            <input class="validate" id="password" type="password" name="password">
+            <input class="validate" id="password" type="password" name="password" length="30">
             <label for="password" class="center-align">Contraseña (Opcional)</label>
-            <p>.</p>
           </div>
+          <p>.</p>
           <div class="input-field col s12 m12">
             <a ng-click="m.api.login()" class="btn modal-close waves-effect waves-light green col s12">Ingresar</a>
           </div>
@@ -55,85 +55,88 @@
     <div>
       <form class="login-form" id="registrarse" name="registrarse">
         <div class="row margin">
-          <p ng-if="!m.session.latlng" class="red-text">Debe activar o dar permisos para compartir su ubicación</p>
-          <p>Datos para inicio de sessión:</p>
+          <div>
+            <span ng-if="!m.session.latlng" class="red-text">Debe activar o dar permisos para compartir su ubicación</span>
+          </div>
+          <div>Datos de usuario:</div>
           <div class="input-field col s12 m6">
             <i class="mdi-social-person-outline prefix"></i>
-            <input class="validate" id="usuario" type="text" name="usuario">
+            <input class="validate" id="usuario" type="text" name="usuario" length="30" >
             <label for="usuario">Usuario*</label>
-            <p>Verificar mayúsculas y minúsculas</p>
           </div>
+          <p>Verificar mayúsculas y minúsculas</p>
           <div class="input-field col s12 m6">
             <i class="mdi-action-lock-outline prefix"></i>
-            <input class="validate" id="password" type="password" name="password">
+            <input class="validate" id="password" type="password" name="password" length="30" >
             <label for="password">Contraseña*</label>
-            <p>...</p>
           </div>
+          <p>...</p>
           <div class="input-field col s12 m12">
             <i class="mdi-social-person-outline prefix"></i>
-            <textarea id="descripcion" name="descripcion" class="materialize-textarea"></textarea>
-            <label for="descripcion">Descripción de usuario</label>
-            <p>...</p>
+            <textarea id="descripcion" name="descripcion" class="materialize-textarea validate" length="250" ></textarea>
+            <label for="descripcion">Breve descripción, aviso o mensaje</label>
           </div>
+          <p>...</p>
           <hr>
-          <p>Datos necesarios para recuperar contraseña:</p>
+          <div>Datos de la ubicación:</div>
           <div class="input-field col s12 m6">
             <i></i>
-            <input class="validate" id="siglas" type="text" name="siglas">
-            <label for="siglas">Siglas</label>
-            <p>...</p>
+            <input class="validate" id="claves" type="text" name="claves" length="120" >
+            <label for="claves">Palabras clave</label>
           </div>
           <div class="input-field col s12 m6">
             <i></i>
-            <input class="validate" id="email" type="email" name="email">
+            <input class="validate" id="sitio" type="text" name="sitio" length="120" >
+            <label for="text" class="">Sitio web</label>
+          </div>
+          <div class="input-field col s12 m6">
+            <i></i>
+            <input class="validate" id="email" type="email" name="email" length="120" >
             <label for="email" data-error="No es válido" data-success="Ok">Email</label>
-            <p>...</p>
           </div>
-          <div class="input-field col s12 m4">
+          <div class="input-field col s12 m6">
             <i></i>
-            <input class="validate" id="nombre" type="text" name="nombre">
-            <label for="nombre" data-error="No es válido" data-success="Ok">Nombres</label>
-            <p>...</p>
+            <input class="validate" id="direccion" type="text" name="direccion" length="120" >
+            <label for="direccion" class="">Dirección</label>
           </div>
-          <div class="input-field col s12 m4">
+          <div class="input-field col s12 m6">
             <i></i>
-            <input class="validate" id="appaterno" type="text" name="appaterno">
-            <label for="appaterno" data-error="No es válido" data-success="Ok">Paterno</label>
-            <p>Apellido paterno</p>
+            <input class="validate" id="zona" type="text" name="zona" length="120" >
+            <label for="zona" class="">Zona</label>
           </div>
-          <div class="input-field col s12 m4">
-            <i></i>
-            <input class="validate" id="apmaterno" type="text" name="apmaterno">
-            <label for="apmaterno" data-error="No es válido" data-success="Ok">Materno</label>
-            <p>Apellido materno</p>
-          </div>
-          <div class="input-field col s4 m4">
-            <i></i>
-            <input class="validate" id="dia" type="number" name="dia">
-            <label for="dia" class="">Día</label>
-          </div>
-          <div class="input-field col s4 m4">
-            <i></i>
-            <input class="validate" id="mes" type="number" name="mes">
-            <label for="mes" class="">Mes</label>
-          </div>
-          <div class="input-field col s4 m4">
-            <i></i>
-            <input class="validate" id="ano" type="number" name="ano">
-            <label for="ano" class="">Año</label>
-          </div>
-          <div class="col s12">
-            <label class="">Tipo</label>
-            <select class="xbrowser-default" id="tipo" name="tipo" value="5">
+          <div class="input-field col s12 m6">
+            <select class="xbrowser-default" id="tipo" name="tipo">
               <option value="5" selected>Cliente</option>
               <option value="4">Repartidor</option>
               <option value="3">Sucursal</option>
               <option value="2">Empresa</option>
             </select>
+            <label class="">Tipo</label>
           </div>
           <p>...</p>
-          <p ng-if="!m.session.latlng" class="red-text">Debe activar o dar permisos para compartir su ubicación</p>
-          <p ng-if="m.session.latlng" class="green-text">Si continua esta de acuerdo en registrar su ubicación</p>
+          <hr>
+          <div>Datos del responsable:</div>
+          <div class="input-field col s12 m4">
+            <i></i>
+            <input class="validate" id="nombre" type="text" name="nombre" length="30" >
+            <label for="nombre" data-error="No es válido" data-success="Ok">Nombres</label>
+          </div>
+          <div class="input-field col s12 m4">
+            <i></i>
+            <input class="validate" id="appaterno" type="text" name="appaterno" length="30" >
+            <label for="appaterno" data-error="No es válido" data-success="Ok">Apellido Paterno</label>
+          </div>
+          <div class="input-field col s12 m4">
+            <i></i>
+            <input class="validate" id="apmaterno" type="text" name="apmaterno" length="30" >
+            <label for="apmaterno" data-error="No es válido" data-success="Ok">Apellido Materno</label>
+          </div>
+          <p>...</p>
+          <hr>
+          <div>
+            <span ng-if="!m.session.latlng" class="red-text">Debe activar o dar permisos para compartir su ubicación</span>
+            <span ng-if="m.session.latlng" class="green-text">Si continua esta de acuerdo en registrar su ubicación</span>
+          </div>
           <div class="input-field col s12 m6">
             <a ng-click="m.api.registrarse()" class="btn waves-effect waves-light col s12 green">Registrarse</a>
           </div>
@@ -172,10 +175,13 @@
     </h5>
       <p style="text-align:justify">
         Para el correcto funcionamiento de este sistema debe activar la ubicación en su dispositivo.
-        También debe dar permisos para compartir su ubicación en su navegador.
+        <br>También debe dar permisos para compartir la ubicación en su navegador.
       </p>
       <p style="text-align:justify">
-        Al ingresar al sitio, esta de acuerdo en el registro de los datos de su ubicación, si no esta de acuerdo no ingrese en el sitio.
+        Este sitio utiliza cookies.
+      </p>
+      <p style="text-align:justify;color:blue;">
+        Si acepta registrar su ubicación en el sistema presione el boton aceptar. En otro caso puede cerrar esta ventana.<br>
       </p>
       <br>
   </div>
@@ -265,6 +271,10 @@
 
 </div>
 <script type="text/javascript">
+  function openTerms() {
+    if($('#modalLeame').length)
+      $('#modalLeame').openModal();
+  }
   $( document ).ready(function(){
     // Initialize collapse button
     $(".button-collapse").sideNav({closeOnClick:true});
@@ -272,8 +282,19 @@
     $('.collapsible').collapsible();
     $(".dropdown-button").dropdown({ hover:false,  belowOrigin:true });
     $('.modal-trigger').leanModal();
+
     $('select').material_select();
-    $('#modalLeame').openModal()
+    $('input.validate, textarea.validate').characterCounter();
+    $('input.validate, textarea.validate').each(function(i,o){
+      if($(o).attr('length')) {
+        $(o).attr('maxlength', $(o).attr('length'))
+      }
+    });
+
+    setTimeout( openTerms,'1000' );
+
+    $('.modal-trigger .mdi-action-description').parent().parent().hide();
+    $('.modal-trigger .mdi-action-input').parent().parent().hide();
     console.log('OK1 LOGIN');
   });
 </script>

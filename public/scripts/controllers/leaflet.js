@@ -10,7 +10,7 @@
 angular.module('localizaFrontendApp')
   //.controller('controladorPrincipal', function ($scope, $http, $q, $routeParams, $location, ENV, Dpa, BreadcrumbFactory) {
   .controller('controladorLeaflet', function ($scope, $http, $q, $location, $cookies, ENV, Datos) {
-console.log('LEAF',$scope.m.session);
+//console.log('LEAF',$scope.m.session);
     var bounds = {
         london: {
             northEast: {
@@ -64,7 +64,7 @@ console.log('LEAF',$scope.m.session);
       },
       open: {
         name: 'OpenStreetLocal',
-        url: 'http://192.168.3.102:8080/service?',
+        url: 'http://192.168.3.33/osm/service?',
         type: 'wms',
         visible: true,
         layerParams: {
@@ -123,6 +123,12 @@ console.log('LEAF',$scope.m.session);
           draggable: true,
           opacity: 0.5,
           title: 'as',
+          icon: {
+            iconUrl: 'img/png/carro_repartidor.png',
+            iconSize: [40,24],
+            shadowUrl: 'img/png/position_marker_shadow.png',
+            shadowAnchor: [20, 24]
+          }
         }/*,
         usuario: {
           lat: -16.5288043,
@@ -203,19 +209,21 @@ console.log('LEAF',$scope.m.session);
       var usuario = $scope.markers[usuaux];
       if(!usuario) {
         $scope.markers[usuaux] = {
-          lat: -16.5276043,
-          lng: -68.1798767,
+          lat: -16.0,
+          lng: -68.0,
           message: "<b>"+usu+"</b>",
           focus: false,
           draggable: false,
           icon: {
             //iconUrl: 'img/png/carro_repartidor.png',
-            iconSize: [40, 25],
-            iconAnchor: [20, 0],
-            popupAnchor: [0, 0],
-            shadowSize: [20, 30],
-            shadowAnchor: [10, 15]
-          }
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -25],
+            shadowUrl: 'img/png/position_marker_shadow.png',
+            shadowSize: [32, 16],
+            shadowAnchor: [8, 16]
+          },
+          markid: usuaux
         }
       }
       return $scope.markers[usuaux];
@@ -314,8 +322,22 @@ console.log('LEAF',$scope.m.session);
         img: null
       };
       $scope.markers = {};
-      setTimeout("document.location='/'",1000);
+      setTimeout("document.location='/'",500);
       console.log('logout:',$scope.m);
+    }
+
+
+    var formValidaCampo = function(objForm,inputName,objDatos,msgError) {
+      if(objForm) {
+        if(msgError && objForm[inputName].value=="") {
+          Materialize.toast(msgError, 2000);
+          return false;
+        } else {
+          objDatos[inputName] = (objForm[inputName].value)? objForm[inputName].value: null;
+        }
+        return true;
+      }
+      return false;
     }
 
 
@@ -324,36 +346,27 @@ console.log('LEAF',$scope.m.session);
         return;
       var form = document.getElementById('registrarse');
       var datos = {};
-      if(form.usuario.value=="") { Materialize.toast('Falta campo usuario', 2000); return; }
-      if(form.password.value=="") { Materialize.toast('Falta campo contraseña', 2000); return; }
-      if(form.descripcion.value=="") { Materialize.toast('Falta campo descripción', 2000); return; }
-      if(form.siglas.value=="") { Materialize.toast('Falta campo siglas', 2000); return; }
-      if(form.email.value=="") { Materialize.toast('Falta campo email', 2000); return; }
-      if(form.nombre.value=="") { Materialize.toast('Falta campo nombres', 2000); return; }
-      if(form.appaterno.value=="") { Materialize.toast('Falta campo ap. paterno', 2000); return; }
-      if(form.apmaterno.value=="") { Materialize.toast('Falta campo ap. materno', 2000); return; }
-      if(form.dia.value=="") { Materialize.toast('Falta campo día', 2000); return; }
-      if(form.mes.value=="") { Materialize.toast('Falta campo mes', 2000); return; }
-      if(form.ano.value=="") { Materialize.toast('Falta campo año', 2000); return; }
 
-      datos.usuario = form.usuario.value;
-      datos.password = form.password.value;
-      datos.descripcion = form.descripcion.value;
-      datos.siglas = form.siglas.value;
-      datos.email = form.email.value;
-      datos.nombre = form.nombre.value;
-      datos.appaterno = form.appaterno.value;
-      datos.apmaterno = form.apmaterno.value;
-      datos.dia = form.dia.value;
-      datos.mes = form.mes.value;
-      datos.ano = form.ano.value;
+      if( !formValidaCampo(form,'usuario',datos,'Complete el campo Usuario') ||
+      !formValidaCampo(form,'password',datos,'Complete el campo Contraseña') ||
+      !formValidaCampo(form,'descripcion',datos,'Complete el campo Descripción') ||
+      !formValidaCampo(form,'claves',datos) ||
+      !formValidaCampo(form,'sitio',datos) ||
+      !formValidaCampo(form,'email',datos) ||
+      !formValidaCampo(form,'direccion',datos) ||
+      !formValidaCampo(form,'zona',datos) ||
+      !formValidaCampo(form,'tipo',datos) ||
+      !formValidaCampo(form,'nombre',datos,'Complete el campo Nombre') ||
+      !formValidaCampo(form,'appaterno',datos,'Complete el campo Apellido Paterno') ||
+      !formValidaCampo(form,'apmaterno',datos,'Complete el campo Apellido Materno') ) {
+        return;
+      }
+
       datos.latlng = $scope.m.session.latlng;
-      datos.siglas = form.siglas.value;
-      datos.tipo = form.tipo.value;
+
       new Fingerprint2().get(function(r,c){
         datos.iddisp = r; //a hash, representing your device fingerprint
         if (datos.usuario!="" && form.password.value!="" && form.descripcion.value!="") {
-          //Materialize.toast(datos, 1000)
           $scope.m.api.postUsuario(datos);
         }
       });
@@ -387,6 +400,8 @@ console.log('LEAF',$scope.m.session);
 
 
     $scope.m.api.seguirUsuario = function(usuario) {
+
+      console.log('seguirUsuario:',usuario);
       $scope.center.lat = usuario.lat;
       $scope.center.lng = usuario.lng;
 
@@ -406,7 +421,7 @@ console.log('LEAF',$scope.m.session);
     }
 
 
-    $scope.m.api.pedidoDetalle = function(pedido) {
+    $scope.m.api.pedidoSeguir = function(pedido) {
       var marcador = $scope.m.api.userMarker('0__el_pedido_qwerty_aserty');
       if(!(pedido.lat&&pedido.lng)){
         delete $scope.markers['0__el_pedido_qwerty_aserty'];
@@ -415,8 +430,8 @@ console.log('LEAF',$scope.m.session);
 
       marcador.message = '<div class="marca-pedido"><b>Ubicación </b>'
       if(pedido.usuario2) {
-        marcador.message+= '<b>de mi pedido a '+pedido.usuario2+':</b>';
-        marcador.icon.iconUrl = 'img/png/carro_basurero.png';
+        marcador.message+= '<b>de mi compra<br>realizado a '+pedido.usuario2+':</b>';
+        marcador.icon.iconUrl = 'img/png/carrito_compra2.png';
         $scope.m.ajustes.seguir = {
           user: {id_usuario:pedido.id_usuario2,usuario:pedido.usuario2},
           marker:$scope.markers['0__el_pedido_qwerty_aserty']
@@ -424,7 +439,7 @@ console.log('LEAF',$scope.m.session);
       }
       if(pedido.usuario1) {
         marcador.message+= '<b>del pedido de '+pedido.usuario1+':</b>';
-        marcador.icon.iconUrl = 'img/png/carro_repartidor.png';
+        marcador.icon.iconUrl = 'img/png/carrito_compra2.png';
         $scope.m.ajustes.seguir = {
           user: {id_usuario:pedido.id_usuario1,usuario:pedido.usuario1},
           marker:$scope.markers['0__el_pedido_qwerty_aserty']
@@ -434,8 +449,8 @@ console.log('LEAF',$scope.m.session);
         marcador.message+= '<div class="detalle">'+pedido.detalle+'</div>';
       }
       marcador.message+= '<div class="fecha">'+pedido.fecha+' '+pedido.hora+'</div>';
-      marcador.message+= '<a class="btn-flat cyan-text" onclick="Japi_chatPedido(\'pedido\')"><i class="material-icons">message</i></a>'
-      //marcador.message+= '<a class="btn-flat blue-text" onclick="Japi_pedidoUsuario(pedido)"><i class="material-icons">add_shopping_cart</i></a>'
+      marcador.message+= '<a class="btn-flat cyan-text" onclick="jApi_chatPedido(\'pedido\')"><i class="material-icons">message</i></a>'
+      //marcador.message+= '<a class="btn-flat blue-text" onclick="jApi_pedidoUsuario(pedido)"><i class="material-icons">add_shopping_cart</i></a>'
       JDatos.pedido = pedido;
       marcador.message+= '</div>';
       marcador.lat = pedido.lat;
@@ -448,6 +463,29 @@ console.log('LEAF',$scope.m.session);
       marcador.focus = true;
     }
 
+
+    $scope.m.api.pedidoSeguirRepartidor = function(pedido) {
+      var marcador = $scope.m.api.userMarker(pedido.usuarior,pedido.id_dispr);
+
+      if(!(pedido.lat&&pedido.lng)){
+        //delete $scope.markers['0__el_pedido_qwerty_aserty'];
+        return;
+      }
+      //marcador.message+= '<a class="btn-flat cyan-text" onclick="jApi_chatPedido(\'pedido\')"><i class="material-icons">message</i></a>'
+      //marcador.message+= '<a class="btn-flat blue-text" onclick="jApi_pedidoUsuario(pedido)"><i class="material-icons">add_shopping_cart</i></a>'
+      JDatos.pedido = pedido;
+      if(pedido.ulat && pedido.ulng) {
+        marcador.lat = pedido.ulat;
+        marcador.lng = pedido.ulng;
+      }
+      $scope.center.lat = marcador.lat;
+      $scope.center.lng = marcador.lng;
+
+      for (var id in $scope.markers) {
+        $scope.markers[id].focus = false;
+      }
+      marcador.focus = true;
+    }
 
 
     $scope.m.api.chatUsuario = function(user) {

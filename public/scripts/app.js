@@ -14,6 +14,7 @@ angular
   .config(function($routeProvider, $httpProvider){
 
     $httpProvider.defaults.useXDomain = true;
+    $httpProvider.interceptors.push('authInterceptor');
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
     $routeProvider

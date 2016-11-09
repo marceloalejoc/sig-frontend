@@ -6,7 +6,7 @@
       <!--li ng-if="m.session.id"><a class="waves-effect waves-light modal-trigger" href="#modalMsg"><i class="mdi-communication-forum left"></i> Chat</a></li-->
       <!--li><a href="#modalUsuarios" class="modal-trigger"><i class="mdi-social-people-outline left"></i>Usuarios</a></li-->
       <li><a href="#modalGrupos" class="modal-trigger"><i class="mdi-social-group left"></i>Grupos</a></li>
-      <li><a href="" ng-click="m.api.openPedidos()"><i class="mdi-content-inbox left"></i>Pedidos</a></li>
+      <li><a href="" ng-click="m.api.openPedidos()"><i class="mdi-content-inbox left"></i>Lista de Pedidos</a></li>
       <!-- Dropdown Trigger -->
       <li ng-if="m.session.id"><a class="dropdown-button" href="#" data-activates="dropdown1"><i class="mdi-action-account-circle left"></i> {{m.session.usuario}}<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
     </ul>
@@ -15,14 +15,14 @@
       <!--li ng-if="m.session.id"><a class="waves-effect waves-light modal-trigger" href="#modalMsg"><i class="mdi-communication-forum left"></i> Chat</a></li-->
       <!--li><a href="#modalUsuarios" class="modal-trigger"><i class="mdi-social-people-outline left"></i>Usuarios</a></li-->
       <li><a href="" ng-click="m.api.gruposAbrir()"><i class="mdi-social-group left"></i>Grupos</a></li>
-      <li><a href="" ng-click="m.api.openPedidos()"><i class="mdi-content-inbox left"></i>Pedidos</a></li>
+      <li><a href="" ng-click="m.api.openPedidos()"><i class="mdi-content-inbox left"></i>Lista de Pedidos</a></li>
       <!-- Dropdown Trigger -->
       <li class="divider"></li>
       <li ng-if="m.session.id"><a class="dropdown-button" href="#" data-activates="dropdown2"><i class="mdi-action-account-circle left"></i> {{m.session.usuario}}<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
       <li><a href="" class="green-text" ng-click="m.api.openProductos()"><i class="mdi-notification-play-install left"></i>Mis Productos</a></li>
       <li><a href="" class="green-text" ng-click="m.api.openMisPedidos()"><i class="mdi-action-shopping-cart left"></i>Mis Pedidos</a></li>
       <li><a href="#modalAjustes" class="modal-trigger green-text"><i class="mdi-action-settings left"></i>Ajustes</a></li>
-      <li><a href="" class="green-text" ng-click="m.api.openMisDatos()"><i class="mdi-action-shopping-cart left"></i>Mis Datos</a></li>
+      <li><a href="" class="green-text" ng-click="m.api.openMisDatos()"><i class="mdi-action-description left"></i>Mis Datos</a></li>
       <li><a href="" class="green-text" ng-click="m.api.logout()"><i class="mdi-action-open-in-new left"></i>Salir</a></li>
       <li class="divider"></li>
     </ul>
@@ -33,15 +33,15 @@
     <li><a href="" ng-click="m.api.openProductos()"><i class="mdi-notification-play-install left"></i>Mis Productos</a></li>
     <li><a href="" ng-click="m.api.openMisPedidos()"><i class="mdi-action-shopping-cart left"></i>Mis Pedidos</a></li>
     <li><a href="#modalAjustes" class="modal-trigger"><i class="mdi-action-settings left"></i>Ajustes</a></li>
-    <li><a href="" class="green-text" ng-click="m.api.openMisDatos()"><i class="mdi-action-shopping-cart left"></i>Mis Datos</a></li>
+    <li><a href="" class="green-text" ng-click="m.api.openMisDatos()"><i class="mdi-action-description left"></i>Mis Datos</a></li>
     <li class="divider"></li>
     <li><a href="" ng-click="m.api.logout()"><i class="mdi-action-open-in-new left"></i>Salir</a></li>
   </ul>
   <ul id="dropdown2" class="dropdown-content">
     <li><a href="" ng-click="m.api.openProductos()"><i class="mdi-notification-play-install left"></i>Mis Productos</a></li>
-    <li><a href="" ng-click="m.api.openMisPedidos()"><i class="mdi-action-shopping-cart left"></i>Pedidos</a></li>
+    <li><a href="" ng-click="m.api.openMisPedidos()"><i class="mdi-action-shopping-cart left"></i>Mis Pedidos</a></li>
     <li><a href="#modalAjustes" class="modal-trigger"><i class="mdi-action-settings left"></i>Ajustes</a></li>
-    <li><a href="" class="green-text" ng-click="m.api.openMisDatos()"><i class="mdi-action-shopping-cart left"></i>Mis Datos</a></li>
+    <li><a href="" class="green-text" ng-click="m.api.openMisDatos()"><i class="mdi-action-description left"></i>Mis Datos</a></li>
     <li class="divider"></li>
     <li><a href="" ng-click="m.api.logout()"><i class="mdi-action-open-in-new left"></i>Salir</a></li>
   </ul>
@@ -57,7 +57,7 @@
         <div id="mensajes" class="mensajes"></div>
         <div style="position:absolute;top:80%;" class="blue"><b>Mensajes con
           <span ng-if="!m.ajustes.seguir">todos:</span>
-          <span ng-if="m.ajustes.m.seguir">{{m.ajustes.seguir.user.usuario}}:</span>
+          <span ng-if="m.ajustes.seguir">{{m.ajustes.seguir.user.usuario}}:</span>
         </b></div>
       </div>
     </div>
@@ -102,6 +102,22 @@
             <li><a class="btn-floating red" ng-click="m.ajustes.gpsOptions.enableHighAccuracy=false"><i class="mdi-navigation-close">no</i></a></li>
           </ul>
         </div>
+      </div>
+
+      <div style="position:relative; min-height:60px;">
+        <div style="float:right;padding-left:4px" class="switch">
+          <label>No<input type="checkbox" ng-model="m.ajustes.actualizarListaU"><span class="lever"></span>Si</label>
+        </div>
+        <b>Actualizar lista de usuarios cada minuto</b>
+        <p>Permitir la actualización automática de la lista de usuarios cada minuto.</p>
+      </div>
+
+      <div style="position:relative; min-height:60px;">
+        <div style="float:right;padding-left:4px" class="switch">
+          <label>No<input type="checkbox" ng-model="m.ajustes.actualizarMensajes"><span class="lever"></span>Si</label>
+        </div>
+        <b>Actualizar mensajes cada 15 seg.</b>
+        <p>Permitir la actualización automática de los mensajes cada 15 minutos.</p>
       </div>
 
       <!-- Imagen ->
@@ -207,19 +223,20 @@
   <div id="modalUsuario" class="modal modal-fixed-footer datos-usuario">
     <div class="modal-content">
       <div ng-if="m.dato.usInfo">
-        <h4>Información de {{m.dato.usInfo.usuario}}</h4>
-        <ul class="collection">
-          <li class="collection-item avatar">
+        <h5>Información de {{m.dato.usInfo.usuario}}</h5>
+          <div class="collection-item avatar">
             <div class="text-center">
-              <img ng-if="m.dato.usInfo.img" class="circle" alt="" src="{{m.dato.usInfo.img}}">
+              <img height="48" ng-if="m.dato.usInfo.img" alt="" src="{{m.dato.usInfo.img}}">
             </div>
             <div class="title"><label>Nombres: </label><br>{{m.dato.usInfo.nombre}} {{m.dato.usInfo.ap_paterno}} {{m.dato.usInfo.ap_materno}}</div>
             <div ng-if="m.dato.usInfo.descripcion"><label>Descripción del negocio: </label><br>{{m.dato.usInfo.descripcion}}</div>
+            <div ng-if="m.dato.usInfo.sitio"><label>Sitio: </label><br>{{m.dato.usInfo.sitio}}</div>
             <div ng-if="m.dato.usInfo.email"><label>Email: </label><br>{{m.dato.usInfo.email}}</div>
+            <div ng-if="m.dato.usInfo.direccion"><label>Direccion: </label><br>{{m.dato.usInfo.direccion}}</div>
+            <div ng-if="m.dato.usInfo.zona"><label>Zona: </label><br>{{m.dato.usInfo.zona}}</div>
             <div ng-if="m.dato.usInfo.siglas"><label>Siglas: </label><br>{{m.dato.usInfo.siglas}}</div>
             <div ng-if="m.dato.usInfo.empresa"><label>Empresa: </label><br>{{m.dato.usInfo.empresa}}</div>
-          </li>
-        </ul>
+          </div>
       </div>
     </div>
     <div class="modal-footer">
@@ -250,7 +267,7 @@
 
   <div id="modalMisPedidos" class="modal modal-fixed-footer lista_pedidos">
     <div class="modal-content">
-      <h5>Mis pedidos realizados</h5>
+      <h5>Mis compras</h5>
       <div>
         <ul class="collection">
           <li class="collection-item avatar" ng-repeat="pedido in m.dato.pedidos">
@@ -258,6 +275,10 @@
             <div class="col s6"><label>Estado: </label> {{pedido.estado}}</div>
             <div class="col s12 detalle"><label>Detalles: </label> {{pedido.detalle}}</div>
             <div class="fecha">{{pedido.fecha}} {{pedido.hora}}</div>
+            <div>
+              <a class="btn-flat green-text" title="Sitio" ng-click="m.api.pedidoSeguir(pedido)"><i class="mdi-maps-pin-drop"></i></a>
+              <a class="btn-flat green-text" title="Seguir" ng-click="m.api.pedidoSeguirRepartidor(pedido)"><i class="material-icons">transfer_within_a_station</i></a>
+            </div>
             <a href="" class="secondary-content" title="Detalle" ng-click="m.api.pedidoDetalle(pedido)"><i class="mdi-action-shopping-cart"></i></a>
           </li>
         </ul>
@@ -278,7 +299,10 @@
             <div class="col s6"><label>Estado: </label> {{pedido.estado}}</div>
             <div class="col s12 detalle"><label>Detalles: </label> {{pedido.detalle}}</div>
             <div class="fecha">{{pedido.fecha}} {{pedido.hora}}</div>
-            <a href="" class="secondary-content" title="Detalle" ng-click="m.api.pedidoDetalle(pedido)"><i class="mdi-action-shopping-cart"></i></a>
+            <div>
+              <a class="btn-flat green-text" title="Seguir" ng-click="m.api.pedidoSeguir(pedido)"><i class="material-icons">transfer_within_a_station</i></a>
+            </div>
+            <a href="" class="secondary-content" title="Detalle" ng-click="m.api.pedidoDetalleAmi(pedido)"><i class="mdi-action-shopping-cart"></i></a>
           </li>
         </ul>
       </div>
@@ -289,6 +313,40 @@
   </div>
 
 
+
+  <div id="modalInfoPedido" class="modal modal-fixed-footer datos-usuario">
+    <div class="modal-content">
+      <div ng-if="m.dato.usInfo">
+        <h4>Información {{tituloModal}}</h4>
+        <ul class="collection">
+          <li class="avatar">
+            <div class="text-center">
+              <img ng-if="m.dato.daInfo.img" class="circle" alt="" src="{{m.dato.daInfo.img}}">
+            </div>
+            <div class="title"><label>Pedido a: </label> {{m.dato.daInfo.para}}</div>
+            <div ng-if="m.dato.daInfo.nombres"><label>Nombres: </label> {{m.dato.daInfo.nombres}}</div>
+            <div ng-if="m.dato.daInfo.email"><label>Email: </label> {{m.dato.daInfo.email}}</div>
+            <div ng-if="m.dato.daInfo.direccion"><label>Dirección: </label> {{m.dato.daInfo.direccion}}</div>
+            <div ng-if="m.dato.daInfo.detalle"><label>Detalles: </label> {{m.dato.daInfo.detalle}}</div>
+            <hr class="blue">
+            <div ng-repeat="prod in m.dato.daInfo.productos" style="border:2px solid #ddd;border-radius:2px;margin:2px;padding:2px;">
+              <div><label>Codigo: </label> {{prod.codigo}}</div>
+              <div><label>Producto: </label> {{prod.producto}}</div>
+              <div><label>Precio Unit.: Bs. </label> {{prod.precio}}</div>
+              <div><label>Cantidad: </label> {{prod.cantidad}}</div>
+              <div><label>Total: Bs. </label> {{prod.precio*prod.cantidad}}</div>
+            </div>
+            <hr class="blue">
+            <div><label>Suma Total: Bs. </label> {{m.dato.daInfo.total}}</div>
+            <div ng-if="m.dato.daInfo.estado"><label>Estado: </label> {{m.dato.daInfo.estado}}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-action modal-close btn-flat blue">Cerrar</a>
+    </div>
+  </div>
 
   <div id="modalPedido" class="modal modal-fixed-footer form_pedido">
     <div class="modal-content">
@@ -462,59 +520,98 @@
       <div>
         <form class="login-form" id="registrarse" name="registrarse">
           <div class="row margin">
-            <p ng-if="!m.session.latlng" class="red-text">Debe activar o dar permisos para compartir su ubicación</p>
-            <p>Datos para inicio de sessión:</p>
+            <div>Datos de usuario:</div>
             <div class="input-field col s12 m6">
               <i class="mdi-social-person-outline prefix"></i>
-              <input class="validate ng-not-empty" id="usuario" type="text" name="usuario" ng-model="m.dato.usInfo.usuario" value="m.dato.usInfo.usuario">
-              <label for="usuario">Usuario</label>
-              <p>Verificar mayúsculas y minúsculas</p>
+              <input class="validate" id="usuario" type="text" name="usuario" length="30" ng-model="m.dato.usInfo.usuario">
+              <label for="usuario">Usuario*</label>
+            </div>
+            <p>Verificar mayúsculas y minúsculas</p>
+            <div class="input-field col s12 m6">
+              <i class="mdi-action-lock-outline prefix"></i>
+              <input class="validate" id="password" type="password" name="password" length="30" ng-model="m.dato.usInfo.contras">
+              <label for="password">Contraseña*</label>
             </div>
             <div class="input-field col s12 m6">
               <i class="mdi-action-lock-outline prefix"></i>
-              <input class="validate" id="password" type="password" name="password" ng-model="m.dato.usInfo.contras">
-              <label for="password">Contraseña*</label>
-              <p>...</p>
+              <input class="validate" id="passwd" type="password" name="passwd" length="30" onblur="validarPass(this,'password')" ng-model="m.dato.usInfo.contrax">
+              <label for="passwd">Repetir contraseña*</label>
             </div>
             <div class="input-field col s12 m12">
               <i class="mdi-social-person-outline prefix"></i>
-              <textarea id="descripcion" name="descripcion" class="materialize-textarea" ng-model="m.dato.usInfo.descripcion"></textarea>
-              <label for="descripcion">Descripción de usuario</label>
-              <p>...</p>
+              <textarea id="descripcion" name="descripcion" class="materialize-textarea validate" length="250" ng-model="m.dato.usInfo.descripcion"></textarea>
+              <label for="descripcion">Breve descripción, aviso o mensaje</label>
             </div>
+            <p>.</p>
             <hr>
-            <p>Datos necesarios para recuperar contraseña:</p>
-            <div class="input-field col s12 m6">
-              <i></i>
-              <input class="validate" id="siglas" type="text" name="siglas" ng-model="m.dato.usInfo.siglas">
-              <label for="siglas">Siglas</label>
-              <p>...</p>
-            </div>
-            <div class="input-field col s12 m6">
-              <i></i>
-              <input class="validate" id="email" type="email" name="email" ng-model="m.dato.usInfo.email">
-              <label for="email" data-error="No es válido" data-success="Ok">Email</label>
-              <p>...</p>
-            </div>
+            <div>Datos del responsable:</div>
             <div class="input-field col s12 m4">
               <i></i>
-              <input class="validate" id="nombre" type="text" name="nombre" ng-model="m.dato.usInfo.nombre">
+              <input class="validate" id="nombre" type="text" name="nombre" length="30" ng-model="m.dato.usInfo.nombre">
               <label for="nombre" data-error="No es válido" data-success="Ok">Nombres</label>
-              <p>...</p>
             </div>
             <div class="input-field col s12 m4">
               <i></i>
-              <input class="validate" id="appaterno" type="text" name="appaterno" ng-model="m.dato.usInfo.ap_paterno">
-              <label for="appaterno" data-error="No es válido" data-success="Ok">Paterno</label>
-              <p>Apellido paterno</p>
+              <input class="validate" id="appaterno" type="text" name="appaterno" length="30" ng-model="m.dato.usInfo.ap_paterno">
+              <label for="appaterno" data-error="No es válido" data-success="Ok">Apellido Paterno</label>
             </div>
             <div class="input-field col s12 m4">
               <i></i>
-              <input class="validate" id="apmaterno" type="text" name="apmaterno" ng-model="m.dato.usInfo.ap_materno">
-              <label for="apmaterno" data-error="No es válido" data-success="Ok">Materno</label>
-              <p>Apellido materno</p>
+              <input class="validate" id="apmaterno" type="text" name="apmaterno" length="30" ng-model="m.dato.usInfo.ap_materno">
+              <label for="apmaterno" data-error="No es válido" data-success="Ok">Apellido Materno</label>
             </div>
-            <div class="input-field col s4 m4">
+            <div>...</div>
+            <hr>
+            <div>Datos de la ubicación:</div>
+            <div class="input-field col s12 m6">
+              <i></i>
+              <input class="validate" id="claves" type="text" name="claves" length="120" ng-model="m.dato.usInfo.claves">
+              <label for="claves">Palabras clave</label>
+            </div>
+            <div class="input-field col s12 m6">
+              <i></i>
+              <input class="validate" id="sitio" type="text" name="sitio" length="120" ng-model="m.dato.usInfo.sitio">
+              <label for="text" class="">Sitio web</label>
+            </div>
+            <div class="input-field col s12 m6">
+              <i></i>
+              <input class="validate" id="email" type="email" name="email" length="120" ng-model="m.dato.usInfo.email">
+              <label for="email" data-error="No es válido" data-success="Ok">Email</label>
+            </div>
+            <div class="input-field col s12 m6">
+              <i></i>
+              <input class="validate" id="direccion" type="text" name="direccion" length="120" ng-model="m.dato.usInfo.direccion">
+              <label for="direccion" class="">Dirección</label>
+            </div>
+            <div class="input-field col s12 m6">
+              <i></i>
+              <input class="validate" id="zona" type="text" name="zona" length="120" ng-model="m.dato.usInfo.zona">
+              <label for="zona" class="">Zona</label>
+            </div>
+            <div class="input-field col s12 m6">
+              <select class="xbrowser-default" id="tipo" name="tipo" ng-model="m.dato.usInfo.nivel">
+                <option value="" disabled>Sin cambios</option>
+                <option value="5">Cliente</option>
+                <option value="4">Repartidor</option>
+                <option value="3">Sucursal</option>
+                <option value="2">Empresa</option>
+              </select>
+              <label class="">Grupo</label>
+            </div>
+            <div>...</div>
+            <hr>
+            <div>Datos opcionales:</div>
+            <div class="input-field col s12 m4">
+              <i></i>
+              <input class="validate" id="siglas" type="text" name="siglas" length="30" ng-model="m.dato.usInfo.siglas">
+              <label for="siglas">Siglas</label>
+            </div>
+            <div class="input-field col s12 m4">
+              <i></i>
+              <input class="validate" id="empresa" type="text" name="empresa" length="30" ng-model="m.dato.usInfo.empresa">
+              <label for="empresa">Empresa</label>
+            </div>
+            <!--div class="input-field col s4 m4">
               <i></i>
               <input class="validate" id="dia" type="number" name="dia" ng-model="m.dato.usInfo.dia">
               <label for="dia">Día</label>
@@ -528,30 +625,35 @@
               <i></i>
               <input class="validate" id="ano" type="number" name="ano" ng-model="m.dato.usInfo.ano">
               <label for="ano">Año</label>
-            </div>
-            <div class="input-field col s12 m6">
-              <select class="xbrowser-default" id="tipo" name="tipo" ng-model="m.dato.usInfo.nivel">
-                <option value="" disabled>Elija un tipo</option>
-                <option value="5">Cliente</option>
-                <option value="4">Repartidor</option>
-                <option value="3">Sucursal</option>
-                <option value="2">Empresa</option>
-              </select>
-              <label>Tipo</label>
-            </div>
-            <div class="input-field col s12 m4">
+            </div-->
+            <div class="input-field col s10 m3">
               <select class="icons" id="img" name="img" ng-model="m.dato.usInfo.img">
-                <option value="" disabled>Elija un marcador</option>
+                <option value="" disabled>Sin cambios</option>
                 <option value="img/png/position_marker.png" data-icon="img/png/position_marker.png" class="circle">Por defecto</option>
                 <option value="img/png/carro_repartidor.png" data-icon="img/png/carro_repartidor.png" class="circle">Carro repartidor</option>
                 <option value="img/png/carro_basurero.png" data-icon="img/png/carro_basurero.png" class="circle">Carro basurero</option>
-                <option value="img/png/position_marker.png" data-icon="img/png/position_marker.png" class="circle">Posicion</option>
+                <option value="img/png/carro2.png" data-icon="img/png/carro2.png" class="circle">Carro</option>
+                <option value="img/png/pizza2.png" data-icon="img/png/pizza2.png" class="circle">Pizza</option>
+                <option value="img/png/correo2.png" data-icon="img/png/correo2.png" class="circle">Correo</option>
+                <option value="img/png/filmacion2.png" data-icon="img/png/filmacion2.png" class="circle">Filmacion</option>
+                <option value="img/png/impresion2.png" data-icon="img/png/impresion2.png" class="circle">Impresion</option>
+                <option value="img/png/persona2.png" data-icon="img/png/persona2.png" class="circle">Persona2</option>
+                <option value="img/png/restaurant2.png" data-icon="img/png/restaurant2.png" class="circle">Restaurante</option>
+                <option value="img/png/telefono2.png" data-icon="img/png/telefono2.png" class="circle">Telefono</option>
+                <option value="img/png/taxi2.png" data-icon="img/png/taxi2.png" class="circle">Taxi</option>
+                <option value="img/png/bus2.png" data-icon="img/png/bus2.png" class="circle">Bus</option>
+                <option value="img/png/estrella_a2.png" data-icon="img/png/estrella_a2.png" class="circle">Estrella 1</option>
+                <option value="img/png/estrella_o2.png" data-icon="img/png/estrella_o2.png" class="circle">Estrella 2</option>
+                <option value="img/png/gasolina2.png" data-icon="img/png/gasolina2.png" class="circle">Gasolina</option>
+                <option value="img/png/sitio_calificado2.png" data-icon="img/png/sitio_calificado2.png" class="circle">Sitio</option>
               </select>
               <label>Marcador</label>
             </div>
-            <p>...</p>
-            <p ng-if="!m.session.latlng" class="red-text">Debe activar o dar permisos para compartir su ubicación</p>
-            <p ng-if="m.session.latlng" class="green-text">Si continua esta de acuerdo en registrar su ubicación</p>
+            <div class="input-field col s2 m1">
+              <img style="height:32px;width:32px;" src="{{m.dato.usInfo.img}}">
+            </div>
+            <div>...</div>
+            <hr>
             <div class="input-field col s12 m6">
               <a ng-click="m.api.saveMisDatos()" class="btn waves-effect waves-light col s12 green">Guardar</a>
             </div>
@@ -576,6 +678,21 @@
     $(".dropdown-button").dropdown({ hover:false,  belowOrigin:true });
     $('.modal-trigger').leanModal();
     $('select').material_select();
+    $('input.validate, textarea.validate').characterCounter();
+    $('input.validate, textarea.validate').each(function(i,o){
+      if($(o).attr('length')) {
+        $(o).attr('maxlength', $(o).attr('length'))
+      }
+    });
+
     console.log('OK1');
   });
+  var validarPass = function(t,n) {
+    n=document.getElementById(n);
+    if(t.value!=n.value) {
+      $(t).toggleClass('valid','false');
+      $(t).toggleClass('invalid','true');
+    }
+    console.log(t,n);
+  }
 </script>

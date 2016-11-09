@@ -9,7 +9,7 @@
  */
 angular.module('localizaFrontendApp')
   //.controller('controladorPrincipal', function ($scope, $http, $q, $routeParams, $location, ENV, Dpa, BreadcrumbFactory) {
-  .controller('controladorPrincipal', function ($scope, $http, $q, $routeParams, $location, $cookies, ENV, Datos) {
+  .controller('controladorPrincipal', function ($scope, $http, $q, $window, $routeParams, $location, $cookies, ENV, Datos) {
 
     var postUbicacionUrl = ENV.localizaApi + ENV.localizaApiVersion + '/ubicacion';
     var postMensajeUrl = ENV.localizaApi + ENV.localizaApiVersion + '/mensaje';
@@ -30,29 +30,23 @@ angular.module('localizaFrontendApp')
         msHora: '00:00:00',
         usInfo: {}
       },
-      ruta: {
-        id: null
-      },
       session: {
         idusuario: null,
         usuario: null,
-        email: null,
         latlng: null,
-        ubicado: false,
-        img: null
+        ubicado: false
       },
       api: {
-        get:null,
-        post:null,
-        put:null,
-        class:''
+        estado: 0
       },
       ajustes: {
         seguir: null,
-        ubicacion: false
+        ubicacion: false,
+        actualizarListaU: true,
+        actualizarMensajes: true
       }
     }
-    console.log('MARCELO',$scope.m);
+    //console.log('MARCELO',$scope.m);
 
 
 
@@ -67,9 +61,9 @@ angular.module('localizaFrontendApp')
 
     var mostrarError = function(objError) {
       var msg = '';
-      $scope.m.session.latlng = null;
-      $scope.m.dato.info = ' ';
-      $scope.m.dato.info = 'red-text';
+      $scope.m.session.latlng = false;
+      $scope.m.session.localiza = false;
+      actualizarIconos();
       switch (objError.code)
       {
         case objError.PERMISSION_DENIED:
@@ -89,11 +83,11 @@ angular.module('localizaFrontendApp')
 
     var ubicarMapa = function(objPosition) {
       $scope.m.session.latlng = [objPosition.coords.latitude, objPosition.coords.longitude];
-      $scope.m.session.ubicado = true;
-      $scope.m.dato.info = '';
+      $scope.m.session.localiza = false;
+      actualizarIconos();
       if(vTick==0) {
         if($scope.m.session.usuario && $scope.m.session.latlng) {
-          $scope.m.api.postUbicacion($scope.m.session.latlng);
+          $scope.m.api.putUbicacion($scope.m.session.latlng);
           var usuario = $scope.m.api.userMarker($scope.m.session.usuario, $scope.m.session.id);
           usuario.lat = $scope.m.session.latlng[0];
           usuario.lng = $scope.m.session.latlng[1];
@@ -103,7 +97,8 @@ angular.module('localizaFrontendApp')
 
     var geolocalizar = function() {
       if (navigator.geolocation) {
-        $scope.m.dato.info = 'blue-text';
+        $scope.m.session.localiza = true;
+        actualizarIconos();
         navigator.geolocation.getCurrentPosition(ubicarMapa, mostrarError, $scope.m.ajustes.gpsOptions);
       }
       else {
@@ -119,7 +114,7 @@ angular.module('localizaFrontendApp')
         if($scope.m.ajustes.ubicacion) {
           geolocalizar();
         } else {
-          $scope.m.session.latlng = null;
+          $scope.m.session.latlng = false;
           $scope.m.session.ubicado = false;
         }
         if($scope.m.session.usuario) {
@@ -127,18 +122,21 @@ angular.module('localizaFrontendApp')
           if($scope.m.session.latlng) {
             //$scope.m.api.getUsuarios($scope.m.session.usuario);
           }
-          if(vTick==0)
-            $scope.m.api.getUsuarios($scope.m.session.usuario);
-          $scope.m.api.getMensajes($scope.m.session.usuario);
+          if(vTick==0) {
+            if($scope.m.ajustes.actualizarListaU)
+              $scope.m.api.getUsuarios($scope.m.session.usuario);
+          }
+          if($scope.m.ajustes.actualizarMensajes)
+            $scope.m.api.getMensajes($scope.m.session.usuario);
         }
-
+/*
       console.log('***********************',vTick,Date());
       console.log('ajustes', $scope.m.ajustes);
       console.log('api', $scope.m.api);
       console.log('dato', $scope.m.dato);
       console.log('ruta', $scope.m.ruta);
       console.log('session', $scope.m.session);
-      console.log('markers',$scope.markers);
+      console.log('markers',$scope.markers);*/
       vTick+=1;
       if(vTick>=4) {
         vTick=0
@@ -152,7 +150,7 @@ angular.module('localizaFrontendApp')
 
     // Se ejecuta cuando hay cambios en la URL
     $scope.$on('$routeChangeSuccess', function() {
-      console.log('RUTA',$location.path(),$cookies.getObject('session'));
+      //console.log('RUTA',$location.path(),$cookies.getObject('session'));
       if ($cookies.getObject('session')) {
         $scope.m.session = $cookies.getObject('session');
         if ($scope.m.session.id) {
@@ -169,6 +167,9 @@ angular.module('localizaFrontendApp')
         if (!$scope.m.session.id) {
           $location.path('/login/');
         }
+      } else {
+        if($location.path()!='/login/')
+        $location.path('/login/');
       }
 
     });
@@ -179,22 +180,25 @@ angular.module('localizaFrontendApp')
     };
 
     $scope.setUsuario = function(user) {
-      $scope.m.ruta.id = user;
       $location.path('/usuarios/'+user+'/info');
     };
 
     var cargarUsuarioInfo = function(user) {
+      $scope.m.api.estado = 1; actualizarIconos();
       var promises = [];
       promises.push($http.get(usuariosUrl+'/'+user+'/info' ));
 
       $q.all(promises).then(function(response) {
         $scope.m.dato.usuarios = response[0].data;
+        $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
+        $scope.m.api.estado = -1; actualizarIconos();
         console.warn('Error al conectarse con la API: ',usuariosUrl);
       });
     };
 
     var cargarUsuarios = function() {
+      $scope.m.api.estado = 1; actualizarIconos();
       var promises = [];
       if($scope.m.session.usuario) {
         promises.push($http.get(postUsuarioUrl, {a:1} ));
@@ -203,8 +207,9 @@ angular.module('localizaFrontendApp')
         $q.all(promises).then(function(response) {
           $scope.m.dato.usuarios = response[0].data;
           $scope.m.dato.mensajes = response[1].data;
-
+          $scope.m.api.estado = 0; actualizarIconos();
         }, function(error) {
+          $scope.m.api.estado = -1; actualizarIconos();
           console.warn('Error al conectarse con la API: ',postUsuarioUrl);
         });
       }
@@ -214,7 +219,9 @@ angular.module('localizaFrontendApp')
     //***********************************
     // funciones globales
     $scope.m.api.postUbicacion = function(latlong) {
+      $scope.m.api.estado = 1; actualizarIconos();
       var datos = {
+        'id': $scope.m.session.id_usuario,
         'usuario': $scope.m.session.usuario,
         'latlng': latlong,
         'iddisp': $scope.m.session.id,
@@ -223,13 +230,40 @@ angular.module('localizaFrontendApp')
       promises.push($http.post(postUbicacionUrl+'/'+$scope.m.session.usuario+'/', datos, Datos.http.config ));
 
       $q.all(promises).then(function(response) {
-        console.log(1);
+        //console.log('UBICA',response[0]);
+        $('#i-phone.mdi-hardware-phone-android').toggleClass('blue-text',response[0].data.phone&&true);
+
+        $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
+        $scope.m.api.estado = -1; actualizarIconos();
+        console.warn('Error al enviar ubicacion ');
+      });
+    }
+
+    $scope.m.api.putUbicacion = function(latlong) {
+      $scope.m.api.estado = 1; actualizarIconos();
+      var datos = {
+        'id': $scope.m.session.id_usuario,
+        'usuario': $scope.m.session.usuario,
+        'latlng': latlong,
+        'iddisp': $scope.m.session.id,
+      }
+      var promises = [];
+      promises.push($http.put(postUbicacionUrl+'/'+datos.id+'/', datos, Datos.http.config ));
+
+      $q.all(promises).then(function(response) {
+        //console.log('UBICA',response[0]);
+        $('#i-phone.mdi-hardware-phone-android').toggleClass('blue-text',response[0].data.phone&&true);
+
+        $scope.m.api.estado = 0; actualizarIconos();
+      }, function(error) {
+        $scope.m.api.estado = -1; actualizarIconos();
         console.warn('Error al enviar ubicacion ');
       });
     }
 
     $scope.m.api.postMsg = function(latlong, msg) {
+      $scope.m.api.estado = 1; actualizarIconos();
       var promises = [];
       var datos = {
         'id1': $scope.m.session.id_usuario,
@@ -246,13 +280,16 @@ angular.module('localizaFrontendApp')
 
       $q.all(promises).then(function(response) {
         console.log(1);
+        $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
         console.warn('Error al enviar ubicacion ');
+        $scope.m.api.estado = -1; actualizarIconos();
       });
     }
 
 
     $scope.m.api.postUsuario = function(datos) {
+      $scope.m.api.estado = 1; actualizarIconos();
       var promises = [];
       promises.push( $http.post(postUsuarioUrl+'/register/'+datos.usuario+'/', datos, Datos.http.config) );
       $q.all(promises).then(function(response) {
@@ -264,8 +301,10 @@ angular.module('localizaFrontendApp')
           if(response[0].data.status==304)
             Materialize.toast('El usuario ya existe',2000);
         }
+        $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
         console.warn('Error al enviar ubicacion ');
+        $scope.m.api.estado = -1; actualizarIconos();
       });
     }
 
@@ -276,10 +315,13 @@ angular.module('localizaFrontendApp')
         id: $scope.m.session.id_usuario,
         usuario: $scope.m.session.usuario,
         iddisp: $scope.m.session.id,
-        seguir: $scope.m.ajustes.seguir
+        seguir: $scope.m.ajustes.seguir,
+        fecha: $scope.m.dato.fecha,
+        hora: $scope.m.dato.hora
       }
       if($scope.m.session.usuario && mensajes) {
-        promises.push($http.get(postUsuarioUrl, { 'usuario': 1 } ));
+        $scope.m.api.estado = 1; actualizarIconos();
+        promises.push($http.get(postUsuarioUrl+'/last/'+$scope.m.dato.usFecha+'/'+$scope.m.dato.usHora , { 'usuario': 1 } ));
 
         $q.all(promises).then(function(response) {
           $scope.m.dato.usuarios = response[0].data;
@@ -288,6 +330,10 @@ angular.module('localizaFrontendApp')
               var usuario = $scope.m.api.userMarker($scope.m.dato.usuarios[id].usuario, $scope.m.dato.usuarios[id].id_dispositivo);
               usuario.lat = $scope.m.dato.usuarios[id].lat;
               usuario.lng = $scope.m.dato.usuarios[id].lng;
+              usuario.usuario = $scope.m.dato.usuarios[id].usuario;
+              usuario.id_dispositivo = $scope.m.dato.usuarios[id].id_dispositivo;
+              usuario.id_usuario = $scope.m.dato.usuarios[id].id_usuario;
+
               usuario.message = '<div class="marca-pedido"><b>'+$scope.m.dato.usuarios[id].usuario+'</b><hr>';
               if($scope.m.dato.usuarios[id].nombre) {
                 usuario.message+= ' '+$scope.m.dato.usuarios[id].nombre;
@@ -299,15 +345,25 @@ angular.module('localizaFrontendApp')
                 usuario.message+= ' '+$scope.m.dato.usuarios[id].ap_materno;
               }
               usuario.message+= '<div class="fecha">'+$scope.m.dato.usuarios[id].fecha+' '+$scope.m.dato.usuarios[id].hora+'</div>';
-              usuario.message+= '<a class="btn-flat cyan-text" onclick="Japi_chatUsuario('+id+')"><i class="material-icons">message</i></a>'
-              usuario.message+= '<a class="btn-flat blue-text" onclick="Japi_pedidoUsuario('+id+')"><i class="material-icons">add_shopping_cart</i></a>'
+              usuario.message+= '<a class="btn-flat cyan-text" onclick="jApi_chatUsuario(\''+usuario.markid+'\')"><i class="material-icons">message</i></a>'
+              if($scope.m.dato.usuarios[id].tipo<65)
+                usuario.message+= '<a class="btn-flat blue-text" onclick="jApi_pedidoUsuario(\''+usuario.markid+'\')"><i class="material-icons">add_shopping_cart</i></a>'
               usuario.message+= '</div>';
               if($scope.m.dato.usuarios[id].img)
                 usuario.icon.iconUrl = $scope.m.dato.usuarios[id].img;
+
+              var fecha = $scope.m.dato.usuarios[id].fecha.substring(0,10);
+              var hora = $scope.m.dato.usuarios[id].hora.substring(0,8);
+              if ($scope.m.dato.usFecha+" "+$scope.m.dato.usHora < fecha+" "+hora) {
+                $scope.m.dato.usFecha = fecha;
+                $scope.m.dato.usHora = hora;
+              }
             }
           }
+          $scope.m.api.estado = 0; actualizarIconos();
         }, function(error) {
           console.warn('Error al conectarse con la API: ',postUsuarioUrl);
+          $scope.m.api.estado = -1; actualizarIconos();
         });
       }
     }
@@ -324,6 +380,7 @@ angular.module('localizaFrontendApp')
         seguir: $scope.m.ajustes.seguir
       }
       if($scope.m.session.usuario && mensajes) {
+        $scope.m.api.estado = 1; actualizarIconos();
         //promises.push($http.post(postMensajeUrl+'/', datos, Datos.http.config ));
         Datos.http.config.method = "POST";
         Datos.http.config.url = postMensajeUrl+'/';
@@ -349,8 +406,10 @@ angular.module('localizaFrontendApp')
             $scope.m.dato.mostrarMensajes($scope.m.dato.mensajes[id].usuario1, $scope.m.dato.mensajes[id].mensaje, fecha+" "+hora);
 
           }
+          $scope.m.api.estado = 0; actualizarIconos();
         }, function(error) {
           console.warn('Error al conectarse con la API: ',postUsuarioUrl);
+          $scope.m.api.estado = -1; actualizarIconos();
         });
 
       }
@@ -361,7 +420,7 @@ angular.module('localizaFrontendApp')
         $('#modalUsuario').openModal();
         return;
       }
-
+      $scope.m.api.estado = 1; actualizarIconos();
       var datos = {
         id: $scope.m.session.id_usuario,
         usuario: $scope.m.session.usuario,
@@ -369,7 +428,7 @@ angular.module('localizaFrontendApp')
         user: user
       };
       var promises = [];
-      promises.push( $http.post(postUsuarioUrl+'/'+user.usuario+'/info', datos, Datos.http.config) );
+      promises.push( $http.post(postUsuarioUrl+'/'+user.usuario+'/info/'+datos.user.id_usuario, datos, Datos.http.config) );
       $q.all(promises).then(function(response) {
         if(response[0].data.status==200) {
           if(response[0].data.usuario) {
@@ -377,8 +436,10 @@ angular.module('localizaFrontendApp')
             $('#modalUsuario').openModal();
           }
         }
+        $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
         console.warn('Error info usuario');
+        $scope.m.api.estado = -1; actualizarIconos();
       });
     }
 
@@ -395,13 +456,16 @@ angular.module('localizaFrontendApp')
         iddisp: $scope.m.session.id,
       };
       var promises = [];
+      $scope.m.api.estado = 1; actualizarIconos();
       promises.push( $http.get(postProductoUrl+'/'+$scope.m.session.usuario+'/'+$scope.m.session.id_usuario, datos, Datos.http.config) );
       $q.all(promises).then(function(response) {
         if(response[0].data[0]) {
           $scope.m.dato.productos = response[0].data;
         }
+        $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
         console.warn('Error info producto');
+        $scope.m.api.estado = -1; actualizarIconos();
       });
     }
 
@@ -428,6 +492,7 @@ angular.module('localizaFrontendApp')
         } else {
           promises.push( $http.post(postProductoUrl+'/'+$scope.m.session.usuario+'/', datos, Datos.http.config) );
         }
+        $scope.m.api.estado = 1; actualizarIconos();
         $q.all(promises).then(function(response) {
           if(form.id_prod.value && response[0].data.i) {
             var prod = $scope.m.dato.productos[response[0].data.i];
@@ -452,8 +517,10 @@ angular.module('localizaFrontendApp')
           $(form).find('input').val('');
           $(form).find('textarea').val('');
           $('#modalProducto').closeModal();
+          $scope.m.api.estado = 0; actualizarIconos();
         }, function(error) {
           console.warn('Error info producto');
+          $scope.m.api.estado = -1; actualizarIconos();
         });
       } else {
         Materialize.toast('Complete',2000);
@@ -480,22 +547,65 @@ angular.module('localizaFrontendApp')
         var datos = "id_usuario="+$scope.m.session.id_usuario+"&i="+index;
         var promises = [];
         promises.push( $http.delete(postProductoUrl+'/'+$scope.m.session.usuario+'/'+prod.id_producto, datos, Datos.http.config) );
+        $scope.m.api.estado = 1; actualizarIconos();
         $q.all(promises).then(function(response) {
           if(response[0].data.status=='200' && response[0].data.id_producto) {
             $scope.m.dato.productos.splice(index,1)
           }
           $('#modalProducto').closeModal();
+          $scope.m.api.estado = 0; actualizarIconos();
         }, function(error) {
           console.warn('Error info producto');
+          $scope.m.api.estado = -1; actualizarIconos();
         });
       }
     }
 
 
 
+    $scope.m.api.pedidoDetalle = function(pedido) { // Mis compras
+      $scope.m.dato.daInfo = {};
+      $scope.tituloModal = ' de la Compra';
+      $('#modalInfoPedido').openModal();
+      var datos = {a:1};
+      var promises = [];
+      promises.push( $http.get(postPedidoUrl+'/'+$scope.m.session.id_usuario+'/info/'+pedido.id_pedido+'', datos, Datos.http.config) );
+      $scope.m.api.estado = 1; actualizarIconos();
+      $q.all(promises).then(function(response) {
+        if(response[0].data && response[0].data.id_pedido) {
+          $scope.m.dato.daInfo = response[0].data;
+        }
+        console.log('DETALLE: ',response[0].data);
+        $scope.m.api.estado = 0; actualizarIconos();
+      }, function(error) {
+        console.warn('Error lista pedidos');
+        $scope.m.api.estado = -1; actualizarIconos();
+      });
+    }
+    $scope.m.api.pedidoDetalleAmi = function(pedido) { // Pedidos hacia
+      $scope.m.dato.daInfo = {};
+      $scope.tituloModal = ' del Pedido';
+      $('#modalInfoPedido').openModal();
+      var datos = {a:1};
+      var promises = [];
+      promises.push( $http.get(postPedidoUrl+'/'+pedido.id_usuario1+'/info/'+pedido.id_pedido+'', datos, Datos.http.config) );
+      $scope.m.api.estado = 1; actualizarIconos();
+      $q.all(promises).then(function(response) {
+        if(response[0].data && response[0].data.id_pedido) {
+          $scope.m.dato.daInfo = response[0].data;
+        }
+        console.log('DETALLE: ',response[0].data);
+        $scope.m.api.estado = 0; actualizarIconos();
+      }, function(error) {
+        console.warn('Error lista pedidos');
+        $scope.m.api.estado = -1; actualizarIconos();
+      });
+    }
+
 
     $scope.m.api.openPedidos = function() {
       $('#modalPedidos').openModal();
+      $scope.m.dato.pedidos = [];
       var datos = {
         id: $scope.m.session.id_usuario,
         usuario: $scope.m.session.usuario,
@@ -503,18 +613,22 @@ angular.module('localizaFrontendApp')
       };
       var promises = [];
       promises.push( $http.get(postPedidoUrl+'/'+$scope.m.session.usuario+'/to/'+$scope.m.session.id_usuario, datos, Datos.http.config) );
+      $scope.m.api.estado = 1; actualizarIconos();
       $q.all(promises).then(function(response) {
         if(response[0].data[0] && response[0].data[0].id_pedido) {
           $scope.m.dato.pedidos = response[0].data;
         }
+        $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
         console.warn('Error lista pedidos');
+        $scope.m.api.estado = -1; actualizarIconos();
       });
     }
 
 
     $scope.m.api.openMisPedidos = function() {
       $('#modalMisPedidos').openModal();
+      $scope.m.dato.pedidos = [];
       var datos = {
         id: $scope.m.session.id_usuario,
         usuario: $scope.m.session.usuario,
@@ -522,12 +636,15 @@ angular.module('localizaFrontendApp')
       };
       var promises = [];
       promises.push( $http.get(postPedidoUrl+'/'+$scope.m.session.usuario+'/'+$scope.m.session.id_usuario, datos, Datos.http.config) );
+      $scope.m.api.estado = 1; actualizarIconos();
       $q.all(promises).then(function(response) {
         if(response[0].data[0] && response[0].data[0].id_pedido) {
           $scope.m.dato.pedidos = response[0].data;
         }
+        $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
         console.warn('Error lista pedidos');
+        $scope.m.api.estado = -1; actualizarIconos();
       });
     }
 
@@ -540,16 +657,20 @@ angular.module('localizaFrontendApp')
         usuario: $scope.m.session.usuario,
         iddisp: $scope.m.session.id,
       };
+      console.log('DEBUG-PEDIDOX', $scope.m.dato.pedido);
       var promises = [];
-      promises.push( $http.get(postProductoUrl+'/'+$scope.m.session.usuario+'/'+$scope.m.dato.pedido.user.id_usuario, datos, Datos.http.config) );
+      promises.push( $http.get(postProductoUrl+'/'+$scope.m.dato.pedido.user.usuario+'/'+$scope.m.dato.pedido.user.id_usuario, datos, Datos.http.config) );
+      $scope.m.api.estado = 1; actualizarIconos();
       $q.all(promises).then(function(response) {
         if(response[0].data[0]) {
           $scope.m.dato.productos = response[0].data;
         } else {
           $scope.m.dato.productos = null;
         }
+        $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
         console.warn('Error pedido productos');
+        $scope.m.api.estado = -1; actualizarIconos();
       });
     }
 
@@ -584,6 +705,7 @@ angular.module('localizaFrontendApp')
         };
         var promises = [];
         promises.push( $http.post(postPedidoUrl+'/'+$scope.m.session.usuario+'/', datos, Datos.http.config) );
+        $scope.m.api.estado = 1; actualizarIconos();
         $q.all(promises).then(function(response) {
           if(response[0].data.status=='403')
           { Materialize.toast('Error registrar pedido',2000); }
@@ -594,8 +716,10 @@ angular.module('localizaFrontendApp')
           else {
             Materialize.toast('Pedido registrado',2000);
           }
+          $scope.m.api.estado = 0; actualizarIconos();
         }, function(error) {
           console.warn('Error enviar pedido');
+          $scope.m.api.estado = -1; actualizarIconos();
         });
       }
     }
@@ -607,10 +731,13 @@ angular.module('localizaFrontendApp')
       };
       var promises = [];
       promises.push( $http.get(postGrupoUrl+'/'+$scope.m.session.usuario+'/'+$scope.m.session.id_usuario, datos, Datos.http.config) );
+      $scope.m.api.estado = 1; actualizarIconos();
       $q.all(promises).then(function(response) {
         $scope.m.dato.grupos = response[0].data;
+        $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
         console.warn('Error obtener grupos');
+        $scope.m.api.estado = -1; actualizarIconos();
       });
     }
 
@@ -631,22 +758,38 @@ angular.module('localizaFrontendApp')
         }
       };
       var promises = [];
-      promises.push( $http.post(postUsuarioUrl+'/'+$scope.m.session.usuario+'/info', datos, Datos.http.config) );
+      promises.push( $http.post(postUsuarioUrl+'/'+$scope.m.session.usuario+'/info/'+$scope.m.session.id_usuario, datos, Datos.http.config) );
+      $scope.m.api.estado = 1; actualizarIconos();
       $q.all(promises).then(function(response) {
+        console.log('RESP:', response[0].data, $('#modalReg'));
         if(response[0].data.status==200) {
           if(response[0].data.usuario) {
             $scope.m.dato.usInfo = response[0].data;
             $('#modalReg').openModal();
+            $('#modalReg input.validate').each(function(i,o){
+              $(o).siblings('label, i').addClass('active');
+            });
+            $('#modalReg textarea').each(function(i,o){
+              $(o).siblings('label, i').addClass('active');
+            });
           }
         }
+        $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
         console.warn('Error info usuario');
+        $scope.m.api.estado = -1; actualizarIconos();
       });
     }
 
     $scope.m.api.saveMisDatos = function() {
+      console.log('SAVE: ',$scope.m.dato.usInfo);
+      if($scope.m.dato.usInfo.contras!=$scope.m.dato.usInfo.contrax) {
+        Materialize.toast('Contraseña distinta',2000);
+        return;
+      }
       var promises = [];
       promises.push( $http.put(postUsuarioUrl+'/'+$scope.m.session.usuario+'/'+$scope.m.session.id_usuario, $scope.m.dato.usInfo, Datos.http.config) );
+      $scope.m.api.estado = 1; actualizarIconos();
       $q.all(promises).then(function(response) {
         if(response[0].data.usuario) {
           if(response[0].data.status==200)
@@ -656,8 +799,10 @@ angular.module('localizaFrontendApp')
           if(response[0].data.status==304)
             Materialize.toast('Solo esta registrado su dispositivo',2000);
         }
+        $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
         console.warn('Error al actualizar datos');
+        $scope.m.api.estado = -1; actualizarIconos();
       });
     }
 
@@ -665,10 +810,10 @@ angular.module('localizaFrontendApp')
 
 
     $scope.m.api.getUsuario = function(datos) {
-      $scope.m.api.class='text-blue';
       var promises = [];
       datos.latlng = $scope.m.session.latlng;
       promises.push( $http.post(Datos.postUsuarioUrl+'/login/'+datos.usuario+'/', datos, Datos.http.config) );
+      $scope.m.api.estado = 1; actualizarIconos();
       $q.all(promises).then(function(response) {
         if(response[0].data.id_usuario) {
           $scope.m.session = response[0].data;
@@ -679,10 +824,10 @@ angular.module('localizaFrontendApp')
         } else {
           Materialize.toast('Error usuario o contraseña',2000);
         }
-        $scope.m.api.class='';
+        $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
         console.warn('Error al enviar ubicacion ');
-        $scope.m.api.class='';
+        $scope.m.api.estado = -1; actualizarIconos();
       });
     }
 
@@ -710,7 +855,8 @@ angular.module('localizaFrontendApp')
         config: {
                   headers : {
                       'Content-Type': 'application/json;charset=utf-8'
-                  }
+                  },
+                  withCredentials: false
               }
       },
       session: {
@@ -720,9 +866,31 @@ angular.module('localizaFrontendApp')
     }
   });
 
+angular.module('localizaFrontendApp')
+  .factory('authInterceptor', function($rootScope, $q, $window) {
+    return {
+      request: function(config) {
+        config.headers = config.headers || {};
+        if ($window.sessionStorage.token) {
+          config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
+        }
+        //console.log('send:',config);
+        return config;
+      },
+      response: function(response) {
+        //console.log('resp:',response);
+        if (response.status === 401 ) {
+          // handle the case where no authenticated
+        }
+        return response || $q.when(response);
+      }
+    }
+  });
+
+
 var JDatos = {};
 
-  var Japi_chatPedido = function(pedido) {
+  var jApi_chatPedido = function(pedido) {
     //console.log(JDatos[pedido]);
     var $scope = $('[ng-controller="controladorPrincipal"]').scope();
     //$scope.m.api.seguirUsuario(user);
@@ -733,13 +901,30 @@ var JDatos = {};
     $scope.m.api.getMensajes($scope.m.session.usuario);
   }
 
-  var Japi_chatUsuario = function(userId) {
-    //console.log(userId);
-    var $scope = $('[ng-controller="controladorPrincipal"]').scope();
-    $scope.m.api.chatUsuario($scope.m.dato.usuarios[userId]);
+  var jApi_chatUsuario = function(markId) {
+    //var $scope = $('[ng-controller="controladorPrincipal"]').scope();
+    var $scope = $('[ng-controller="controladorLeaflet"]').scope();
+    $scope.m.api.chatUsuario($scope.markers[markId]);
   }
-  var Japi_pedidoUsuario = function(userId) {
-    //console.log(userId);
-    var $scope = $('[ng-controller="controladorPrincipal"]').scope();
-    $scope.m.api.pedidoUsuario($scope.m.dato.usuarios[userId]);
+  var jApi_pedidoUsuario = function(markId) {
+    //var $scope = $('[ng-controller="controladorPrincipal"]').scope();
+    var $scope = $('[ng-controller="controladorLeaflet"]').scope();
+    $scope.m.api.pedidoUsuario($scope.markers[markId]);
+  }
+
+
+  var actualizarIconos = function() {
+    var $scope1 = $('[ng-controller="controladorPrincipal"]').scope();
+
+    $('#i-gps').toggleClass('blue-text',$scope1.m.session.latlng&&true);
+    $('#i-place').toggleClass('blue-text',$scope1.m.session.localiza&&true);
+    $('#i-backup').toggleClass('blue-text',$scope1.m.api.estado===1);
+    $('#i-backup').toggleClass('red-text',$scope1.m.api.estado===-1);
+    if($scope1.m.session.latlng) {
+      $('.mdi-action-description').parent().parent().show(200);
+      $('.modal-trigger .mdi-action-input').parent().parent().show();
+    } else {
+      $('.mdi-action-description').parent().parent().hide(200);
+      $('.modal-trigger .mdi-action-input').parent().parent().hide();
+    }
   }
