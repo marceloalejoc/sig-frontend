@@ -115,7 +115,7 @@ angular.module('localizaFrontendApp')
         zoom: 10,
       },
       markers: {
-        prueba_xyz83: {
+        /*prueba_xyz83: {
           lat: -16.5286043,
           lng: -68.1798767,
           message: "<b>LATLONG</b><br>Obtenerpos",
@@ -323,7 +323,6 @@ angular.module('localizaFrontendApp')
       };
       $scope.markers = {};
       setTimeout("document.location='/'",500);
-      console.log('logout:',$scope.m);
     }
 
 
@@ -401,7 +400,6 @@ angular.module('localizaFrontendApp')
 
     $scope.m.api.seguirUsuario = function(usuario) {
 
-      console.log('seguirUsuario:',usuario);
       $scope.center.lat = usuario.lat;
       $scope.center.lng = usuario.lng;
 
@@ -448,6 +446,9 @@ angular.module('localizaFrontendApp')
       if(pedido.detalle) {
         marcador.message+= '<div class="detalle">'+pedido.detalle+'</div>';
       }
+      if(pedido.estado) {
+        marcador.message+= '<div class="detalle">Estado: '+pedido.estado+'</div>';
+      }
       marcador.message+= '<div class="fecha">'+pedido.fecha+' '+pedido.hora+'</div>';
       marcador.message+= '<a class="btn-flat cyan-text" onclick="jApi_chatPedido(\'pedido\')"><i class="material-icons">message</i></a>'
       //marcador.message+= '<a class="btn-flat blue-text" onclick="jApi_pedidoUsuario(pedido)"><i class="material-icons">add_shopping_cart</i></a>'
@@ -486,6 +487,7 @@ angular.module('localizaFrontendApp')
       }
       marcador.focus = true;
     }
+
 
 
     $scope.m.api.chatUsuario = function(user) {

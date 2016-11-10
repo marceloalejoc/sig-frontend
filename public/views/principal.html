@@ -278,6 +278,7 @@
             <div>
               <a class="btn-flat green-text" title="Sitio" ng-click="m.api.pedidoSeguir(pedido)"><i class="mdi-maps-pin-drop"></i></a>
               <a class="btn-flat green-text" title="Seguir" ng-click="m.api.pedidoSeguirRepartidor(pedido)"><i class="material-icons">transfer_within_a_station</i></a>
+              <a ng-if="pedido.estado=='entregado'" class="btn-flat blue-text" title="Entregar" ng-click="m.api.pedidoRecibe(pedido,$index)"><i class="mdi-action-done-all"></i>Recibir</a>
             </div>
             <a href="" class="secondary-content" title="Detalle" ng-click="m.api.pedidoDetalle(pedido)"><i class="mdi-action-shopping-cart"></i></a>
           </li>
@@ -301,6 +302,7 @@
             <div class="fecha">{{pedido.fecha}} {{pedido.hora}}</div>
             <div>
               <a class="btn-flat green-text" title="Seguir" ng-click="m.api.pedidoSeguir(pedido)"><i class="material-icons">transfer_within_a_station</i></a>
+              <a ng-if="pedido.estado=='registrado'" class="btn-flat blue-text" title="Entregar" ng-click="m.api.pedidoEntrega(pedido,$index)"><i class="mdi-action-done"></i>Entregar</a>
             </div>
             <a href="" class="secondary-content" title="Detalle" ng-click="m.api.pedidoDetalleAmi(pedido)"><i class="mdi-action-shopping-cart"></i></a>
           </li>
@@ -309,6 +311,15 @@
     </div>
     <div class="modal-footer">
       <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat blue">Cerrar</a>
+    </div>
+  </div>
+
+
+  <div id="modalEntrega" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h5>Entregar producto</h5>
+    </div>
+    <div class="modal-footer">
     </div>
   </div>
 
@@ -356,7 +367,7 @@
           <div class="input-field col s12 m6">
             <i class="mdi-social-person-outline prefix"></i>
             <input class="validate" id="nombres" type="text" name="nombres" value="{{m.session.nombre}} {{m.session.ap_paterno}}" readonly>
-            <label for="nombres" data-error="No es válido" data-success="Ok" class="center-align">Nombre completo</label>
+            <label for="nombres" class="center-align">Nombre completo</label>
           </div><br>
           <div class="input-field col s12 m6">
             <i class="mdi-social-person-outline prefix"></i>
@@ -366,7 +377,7 @@
           <div class="input-field col s12 m12">
             <i class="mdi-social-person-outline prefix"></i>
             <input class="validate" id="direccion" type="text" name="direccion">
-            <label for="direccion" data-error="No es válido" data-success="Ok" class="center-align">Dirección</label>
+            <label for="direccion" class="center-align">Dirección</label>
           </div><br>
           <p>Lista de Productos:</p>
           <div id="list-pedido" class="row margin">
@@ -453,24 +464,24 @@
         <input type="hidden" id="divindex" name="divindex" value="">
         <input type="hidden" id="id_prod" name="id_prod" value="">
         <div>
-          <input type="text" id="codigo" name="codigo" value="">
           <label for="codigo">Codigo de producto</label>
+          <input type="text" id="codigo" name="codigo" value="">
         </div>
         <div>
-          <input type="text" id="nombre" name="nombre" value="">
           <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" value="">
         </div>
         <div>
-          <textarea id="detalle" name="detalle" style="height:100px;"></textarea>
           <label for="detalle">Detalle del producto</label>
+          <textarea id="detalle" name="detalle" style="height:100px;"></textarea>
         </div>
         <div class="col s6">
-          <input type="number" id="precio" name="precio" value="">
           <label for="precio">Precio</label>
+          <input type="number" id="precio" name="precio" value="">
         </div>
         <div class="col s6">
-          <input type="number" id="cantidad" name="cantidad" value="">
           <label for="cantidad">Cantidad</label>
+          <input type="number" id="cantidad" name="cantidad" value="">
         </div>
       </form>
     </div>
@@ -497,7 +508,7 @@
             <p>{{user.nombre}} {{user.ap_paterno}}</p>
             <p>
               <a class="modal-action modal-close btn-flat cyan-text" title="Mensaje" ng-click="m.api.chatUsuario(user)"><i class="material-icons">message</i></a>
-              <a class="modal-action modal-close btn-flat blue-text" title="Pedido" ng-click="m.api.pedidoUsuario(user)"><i class="material-icons">add_shopping_cart</i></a>
+              <a ng-if="user.nprod>0" class="modal-action modal-close btn-flat blue-text" title="Pedido" ng-click="m.api.pedidoUsuario(user)"><i class="material-icons">add_shopping_cart</i></a>
               <a class="modal-action modal-close btn-flat green-text" title="Seguir" ng-click="m.api.seguirUsuario(user)"><i class="material-icons">transfer_within_a_station</i></a>
             </p>
             <p class="fecha">{{user.fecha}} {{user.hora}}</p>

@@ -512,7 +512,12 @@ angular.module('localizaFrontendApp')
               fecha: response[0].data.fecha,
               hora: response[0].data.hora
             }
-            $scope.m.dato.productos = [prod].concat($scope.m.dato.productos);
+            if ($scope.m.dato.productos) {
+              $scope.m.dato.productos = [prod].concat($scope.m.dato.productos);
+            }
+            else {
+              $scope.m.dato.productos = [prod];
+            }
           }
           $(form).find('input').val('');
           $(form).find('textarea').val('');
@@ -575,7 +580,6 @@ angular.module('localizaFrontendApp')
         if(response[0].data && response[0].data.id_pedido) {
           $scope.m.dato.daInfo = response[0].data;
         }
-        console.log('DETALLE: ',response[0].data);
         $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
         console.warn('Error lista pedidos');
@@ -594,7 +598,6 @@ angular.module('localizaFrontendApp')
         if(response[0].data && response[0].data.id_pedido) {
           $scope.m.dato.daInfo = response[0].data;
         }
-        console.log('DETALLE: ',response[0].data);
         $scope.m.api.estado = 0; actualizarIconos();
       }, function(error) {
         console.warn('Error lista pedidos');
@@ -657,7 +660,6 @@ angular.module('localizaFrontendApp')
         usuario: $scope.m.session.usuario,
         iddisp: $scope.m.session.id,
       };
-      console.log('DEBUG-PEDIDOX', $scope.m.dato.pedido);
       var promises = [];
       promises.push( $http.get(postProductoUrl+'/'+$scope.m.dato.pedido.user.usuario+'/'+$scope.m.dato.pedido.user.id_usuario, datos, Datos.http.config) );
       $scope.m.api.estado = 1; actualizarIconos();
@@ -724,6 +726,59 @@ angular.module('localizaFrontendApp')
       }
     }
 
+
+    $scope.m.api.pedidoEntrega = function(pedido,i) {
+      var datos = {
+        id_usuario: $scope.m.session.id_usuario,
+        usuario: $scope.m.session.usuario,
+        latlng: $scope.m.session.latlng,
+        pedido: pedido
+      };
+      var promises = [];
+      promises.push( $http.put(postPedidoUrl+'/'+$scope.m.session.usuario+'/entrega/'+pedido.id_pedido, datos, Datos.http.config) );
+      $scope.m.api.estado = 1; actualizarIconos();
+      $q.all(promises).then(function(response) {
+        $scope.m.api.estado = 0; actualizarIconos();
+        if(response[0].data.status=='200')
+        { Materialize.toast('Pedido entregado',2000); $scope.m.dato.pedidos[i].estado='entregado'; }
+        else if(response[0].data.status=='201')
+        { Materialize.toast('Debe estar cerca del lugar de la solicitud',2000); }
+        else
+        { Materialize.toast('Ups!',2000); }
+
+      }, function(error) {
+        console.warn('Error entregar pedido');
+        $scope.m.api.estado = -1; actualizarIconos();
+      });
+    }
+
+    $scope.m.api.pedidoRecibe = function(pedido,i) {
+      var datos = {
+        id_usuario: $scope.m.session.id_usuario,
+        usuario: $scope.m.session.usuario,
+        latlng: $scope.m.session.latlng,
+        pedido: pedido
+      };
+      var promises = [];
+      promises.push( $http.put(postPedidoUrl+'/'+$scope.m.session.usuario+'/recibe/'+pedido.id_pedido, datos, Datos.http.config) );
+      $scope.m.api.estado = 1; actualizarIconos();
+      $q.all(promises).then(function(response) {
+        $scope.m.api.estado = 0; actualizarIconos();
+        if(response[0].data.status=='200')
+        { Materialize.toast('Pedido recibido',2000); $scope.m.dato.pedidos[i].estado='recibido'; }
+        else if(response[0].data.status=='201')
+        { Materialize.toast('Debe estar cerca del lugar de su pedido',2000); }
+        else
+        { Materialize.toast('Ups!',2000); }
+
+      }, function(error) {
+        console.warn('Error recibir pedido');
+        $scope.m.api.estado = -1; actualizarIconos();
+      });
+    }
+
+
+
     $scope.m.api.gruposAbrir = function() {
       $('#modalGrupos').openModal();
       var datos = {
@@ -761,7 +816,6 @@ angular.module('localizaFrontendApp')
       promises.push( $http.post(postUsuarioUrl+'/'+$scope.m.session.usuario+'/info/'+$scope.m.session.id_usuario, datos, Datos.http.config) );
       $scope.m.api.estado = 1; actualizarIconos();
       $q.all(promises).then(function(response) {
-        console.log('RESP:', response[0].data, $('#modalReg'));
         if(response[0].data.status==200) {
           if(response[0].data.usuario) {
             $scope.m.dato.usInfo = response[0].data;
@@ -782,7 +836,6 @@ angular.module('localizaFrontendApp')
     }
 
     $scope.m.api.saveMisDatos = function() {
-      console.log('SAVE: ',$scope.m.dato.usInfo);
       if($scope.m.dato.usInfo.contras!=$scope.m.dato.usInfo.contrax) {
         Materialize.toast('Contraseña distinta',2000);
         return;
