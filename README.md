@@ -22,6 +22,10 @@ El dispositivo debe tener las siguientes características:
 - Navegador HTML5
 - GPS
 
+### Componentes
+
+- [FileManager](https://github.com/simogeo/Filemanager)
+
 ### Instalación
 
 Para realizar la instalación ver archivo [INSTALL.md](INSTALL.md)
