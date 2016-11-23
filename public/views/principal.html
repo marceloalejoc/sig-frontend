@@ -385,9 +385,12 @@
               <div><a ng-click="m.api.pedidoRemoveProd($index,prod)" href="" class="btn-floating right red"><i class="mdi-content-remove"></i></a></div>
               <div><label>Cantidad: </label> <input type="number" id="cantidad" name="cantidad" ng-model="prod.pcant" style="width:50px"/></div>
               <div><label>Detalle: </label> {{prod.detalle}}</div>
+              <div class="text-center right">
+                <img width="64" height="64" class="circle" alt="" src="{{prod.imagen}}">
+              </div>
               <div><label>Precio: </label> {{prod.precio}}</div>
               <div><label>Total: </label> {{prod.pcant * prod.precio}}</div>
-              <hr>
+              <hr style="clear:both">
             </div>
           </div>
           <a ng-click="m.api.pedidoListProd()" href="" class="waves-effect waves-yellow btn-floating right"><i class="mdi-content-add"></i></a>
@@ -411,7 +414,10 @@
       <h5 class="title">Productos disponibles</h5>
       <div class="row1">
         <ul class="collection">
-          <li class="collection-item" ng-repeat="prod in m.dato.productos">
+          <li class="collection-item avatar" ng-repeat="prod in m.dato.productos">
+              <div class="text-center">
+                <img class="circle" alt="" src="{{prod.imagen}}">
+              </div>
             <div><label>Código: </label> {{prod.codigo}}</div>
             <div><label>Producto: </label> {{prod.nombre}}</div>
             <div class="precio"><label>Precio: </label> {{prod.precio}}</div>
@@ -435,7 +441,10 @@
       <h5 class="title">Productos</h5>
       <div class="row1">
         <ul class="collection">
-          <li class="collection-item" ng-repeat="prod in m.dato.productos">
+          <li class="collection-item avatar" ng-repeat="prod in m.dato.productos">
+              <div class="text-center">
+                <img class="circle" alt="" src="{{prod.imagen}}">
+              </div>
             <div><label>Código: </label> {{prod.codigo}}</div>
             <div><label>Producto: </label> {{prod.nombre}}</div>
             <div class="precio"><label>Precio: </label> {{prod.precio}}</div>
@@ -463,6 +472,13 @@
       <form id="formProducto" class="row margin">
         <input type="hidden" id="divindex" name="divindex" value="">
         <input type="hidden" id="id_prod" name="id_prod" value="">
+        <div>
+          <img id="imagen_src" width="64" height="64" src="">
+        </div>
+        <div>
+          <label for="nombre">Imagen</label>
+          <input type="text" id="imagen" name="imagen" value="">
+        </div>
         <div>
           <label for="codigo">Codigo de producto</label>
           <input type="text" id="codigo" name="codigo" value="">
@@ -637,6 +653,11 @@
               <input class="validate" id="ano" type="number" name="ano" ng-model="m.dato.usInfo.ano">
               <label for="ano">Año</label>
             </div-->
+            <div class="input-field col s12 m4">
+              <i></i>
+              <input class="validate" id="imagen" type="text" name="imagen" length="128" ng-model="m.dato.usInfo.img">
+              <label for="imagen">URL Marcador</label>
+            </div>
             <div class="input-field col s10 m3">
               <select class="icons" id="img" name="img" ng-model="m.dato.usInfo.img">
                 <option value="" disabled>Sin cambios</option>
@@ -658,7 +679,7 @@
                 <option value="img/png/gasolina2.png" data-icon="img/png/gasolina2.png" class="circle">Gasolina</option>
                 <option value="img/png/sitio_calificado2.png" data-icon="img/png/sitio_calificado2.png" class="circle">Sitio</option>
               </select>
-              <label>Marcador</label>
+              <label>Marcador predefinido</label>
             </div>
             <div class="input-field col s2 m1">
               <img style="height:32px;width:32px;" src="{{m.dato.usInfo.img}}">

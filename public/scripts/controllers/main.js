@@ -482,6 +482,7 @@ angular.module('localizaFrontendApp')
           nombre: form.nombre.value,
           detalle: form.detalle.value,
           precio: form.precio.value,
+          imagen: form.imagen.value,
           cant: form.cantidad.value
         };
         var promises = [];
@@ -501,6 +502,7 @@ angular.module('localizaFrontendApp')
             prod.detalle = form.detalle.value;
             prod.precio = form.precio.value;
             prod.cant = form.cantidad.value;
+            prod.imagen = form.imagen.value;
           } else {
             var prod = {
               id_producto: response[0].data.id_producto,
@@ -509,6 +511,7 @@ angular.module('localizaFrontendApp')
               detalle: form.detalle.value,
               precio: form.precio.value,
               cant: form.cantidad.value,
+              imagen: form.imagen.value,
               fecha: response[0].data.fecha,
               hora: response[0].data.hora
             }
@@ -544,6 +547,8 @@ angular.module('localizaFrontendApp')
         form.detalle.value = prod.detalle;
         form.precio.value = prod.precio;
         form.cantidad.value = prod.cantidad;
+        form.imagen.value = prod.imagen;
+        $('#imagen_src').attr('src',prod.imagen);
       }
     }
 

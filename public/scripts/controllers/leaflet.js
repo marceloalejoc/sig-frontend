@@ -216,12 +216,12 @@ angular.module('localizaFrontendApp')
           draggable: false,
           icon: {
             //iconUrl: 'img/png/carro_repartidor.png',
-            iconSize: [32, 32],
-            iconAnchor: [16, 32],
-            popupAnchor: [0, -25],
+            iconSize: [28, 28],
+            iconAnchor: [14, 28],
+            popupAnchor: [0, -20],
             shadowUrl: 'img/png/position_marker_shadow.png',
-            shadowSize: [32, 16],
-            shadowAnchor: [8, 16]
+            shadowSize: [28, 14],
+            shadowAnchor: [7, 14]
           },
           markid: usuaux
         }
