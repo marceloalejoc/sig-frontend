@@ -1,7 +1,7 @@
 {
   "development": {
     "name": "development",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "localizaApi": "//192.168.3.33/back",
     "localizaApiVersion": "/api/v1",
     "color": "eee"
