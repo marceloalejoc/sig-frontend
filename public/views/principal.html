@@ -526,6 +526,7 @@
               <a class="modal-action modal-close btn-flat cyan-text" title="Mensaje" ng-click="m.api.chatUsuario(user)"><i class="material-icons">message</i></a>
               <a ng-if="user.nprod>0" class="modal-action modal-close btn-flat blue-text" title="Pedido" ng-click="m.api.pedidoUsuario(user)"><i class="material-icons">add_shopping_cart</i></a>
               <a class="modal-action modal-close btn-flat green-text" title="Seguir" ng-click="m.api.seguirUsuario(user)"><i class="material-icons">transfer_within_a_station</i></a>
+              <a class="modal-action modal-close btn-flat green-text" title="Seguir" ng-click="m.api.getLineString(user)"><i class="mdi-content-gesture"></i></a>
             </p>
             <p class="fecha">{{user.fecha}} {{user.hora}}</p>
             <a href="" class="secondary-content" ng-click="m.api.infoUsuario(user)"><i class="material-icons">grade</i></a>

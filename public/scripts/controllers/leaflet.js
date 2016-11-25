@@ -9,7 +9,7 @@
  */
 angular.module('localizaFrontendApp')
   //.controller('controladorPrincipal', function ($scope, $http, $q, $routeParams, $location, ENV, Dpa, BreadcrumbFactory) {
-  .controller('controladorLeaflet', function ($scope, $http, $q, $location, $cookies, ENV, Datos) {
+  .controller('controladorLeaflet', function ($scope, $http, $q, $location, $cookies, ENV, Datos, leafletData) {
 //console.log('LEAF',$scope.m.session);
     var bounds = {
         london: {
@@ -182,6 +182,151 @@ angular.module('localizaFrontendApp')
         baselayers[layerName] = $scope.definedLayers[layerName];
       }
     };
+
+
+
+
+    // Features de municipios para validar las ubicaciones
+    $scope.m.api.getFeture = function(datos) {
+      var promises = [];
+      promises.push( $http.get(Datos.postFeatureUrl+'/'+123+'/', datos, Datos.http.config) );
+      $scope.m.api.estado = 1; actualizarIconos();
+      $q.all(promises).then(function(response) {
+        console.log('RESP:', response[0].data);
+        leafletData.getMap().then(function(map) {
+            function getColor(d) {
+                return d > 1000 ? '#800026' :
+                       d > 500  ? '#BD0026' :
+                       d > 200  ? '#E31A1C' :
+                       d > 100  ? '#FC4E2A' :
+                       d > 50   ? '#FD8D3C' :
+                       d > 20   ? '#FEB24C' :
+                       d > 10   ? '#FED976' :
+                                  '#FFEDA0';
+            }
+            function style(feature) {
+                return {
+                    fillColor: getColor(feature.properties.id_dpa),
+                    weight: 2,
+                    opacity: 1,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.1
+                };
+            }
+            //L.geoJson(statesData, {style: style}).addTo(map);
+            L.geoJson(response[0].data, {style: style}).addTo(map);
+        });
+        $scope.m.api.estado = 0; actualizarIconos();
+      }, function(error) {
+        console.warn('Error al obtener mapa del municipio ');
+        $scope.m.api.estado = -1; actualizarIconos();
+      });
+    }
+    //$scope.m.api.getFeture();
+
+
+    // Features de municipios para validar las ubicaciones
+    var linea = {};
+    $scope.m.api.getLineString = function(user) {
+      if(linea[user.usuario]) {
+        return;
+      }
+      var datos = {
+        id_usuario: user.id_usuario,
+        fIni:'2016-01-01',
+        fFin:'2016-12-01'
+      }
+      var promises = [];
+      promises.push( $http.post(Datos.postFeatureUrl+'/'+123+'/', datos, Datos.http.config) );
+      $scope.m.api.estado = 1; actualizarIconos();
+      $q.all(promises).then(function(response) {
+        leafletData.getMap().then(function(map) {
+          function aleatorio(inferior,superior){
+             var numPosibilidades = superior - inferior
+             var aleat = Math.random() * numPosibilidades
+             aleat = Math.floor(aleat)
+             return parseInt(inferior) + aleat
+          }
+          function color_aleatorio(){
+             var hexadecimal = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F")
+             var color_aleatorio = "#";
+             for (var i=0;i<6;i++){
+                var posarray = aleatorio(0,hexadecimal.length)
+                color_aleatorio += hexadecimal[posarray]
+             }
+             return color_aleatorio
+          }
+            //L.geoJson(statesData, {style: style}).addTo(map);
+            function onEachFeature(feature, layer) {
+              var popupContent = "<b>Información</b>";
+              if (feature.properties){
+                if(feature.properties.usuario) {
+                  popupContent += " <b>"+feature.properties.usuario+"</b>";
+                }
+                if(feature.properties.vel) {
+                  popupContent += "<div><b>Velocidad aprox.</b>: "+feature.properties.vel+" Km/h</div>";
+                }
+                if(feature.properties.dist) {
+                  popupContent += "<div><b>Distancia aprox.</b>: "+feature.properties.dist+" Km</div>";
+                }
+                if(feature.properties.fecha&&feature.properties.hora) {
+                  popupContent += "<div><b>Fecha:</b> "+feature.properties.fecha+" "+feature.properties.hora+"</div>";
+                }
+              }
+              layer.bindPopup(popupContent);
+            }
+            var color = color_aleatorio();
+            linea[user.usuario] = L.geoJson(response[0].data,{
+              onEachFeature: onEachFeature,
+              pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, {
+                  radius: 6,
+                  fillColor: color,
+                  color: "#000",
+                  weight: 1,
+                  opacity: 1,
+                  fillOpacity: 0.8
+                });
+              }
+            }).addTo(map);
+            //L.geoJson(bicycleRental).addTo(map);
+
+            var miControl = L.control({position: 'bottomleft'});
+                //control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
+              miControl.onAdd = function (map) {
+                var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+                var close = L.DomUtil.create('div');
+                var img = L.DomUtil.create('svg');
+                img.innerHTML ='<svg width="30" height="10">'
+                                +'<line x1="6" y1="5" x2="24" y2="5" style="stroke:#0033ff;stroke-width:4" />'
+                                +'<circle cx="6" cy="5" r="5" fill="'+color+'" stroke="#000" stroke-width="1" />'
+                                +'<circle cx="24" cy="5" r="5" fill="'+color+'" stroke="#000" stroke-width="1" />'
+                              +'</svg> .'
+                container.style.backgroundColor = 'white';
+                container.style.width = 'auto';
+                container.style.height = 'auto';
+                close.innerHTML = ". <b>" + user.usuario + "</b> .";
+                close.onclick = function(){
+                  map.removeLayer(linea[user.usuario]);
+                  miControl.removeFrom(map);
+                  delete linea[user.usuario];
+                }
+                close.appendChild(img);
+                container.appendChild(close);
+                return container;
+              };
+            miControl.addTo(map);
+
+        });
+        $scope.m.api.estado = 0; actualizarIconos();
+      }, function(error) {
+        console.warn('Error al obtener mapa del municipio ');
+        $scope.m.api.estado = -1; actualizarIconos();
+      });
+    }
+    //$scope.m.api.getLineString();
+
 
     /*$scope.$watch("center.zoom", function(zoom) {
       $scope.layers.baselayers = {};

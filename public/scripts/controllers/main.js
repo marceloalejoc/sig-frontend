@@ -17,6 +17,7 @@ angular.module('localizaFrontendApp')
     var postPedidoUrl = ENV.localizaApi + ENV.localizaApiVersion + '/pedidos';
     var postProductoUrl = ENV.localizaApi + ENV.localizaApiVersion + '/products';
     var postGrupoUrl = ENV.localizaApi + ENV.localizaApiVersion + '/groups';
+    var postFeatureUrl = ENV.localizaApi + ENV.localizaApiVersion + '/features';
 
     Datos.session.ubicado = false;
 
@@ -909,6 +910,7 @@ angular.module('localizaFrontendApp')
   .service('Datos', function($rootScope, ENV){
     return {
       postUsuarioUrl: ENV.localizaApi + ENV.localizaApiVersion + '/users',
+      postFeatureUrl: ENV.localizaApi + ENV.localizaApiVersion + '/features',
       http: {
         config: {
                   headers : {
