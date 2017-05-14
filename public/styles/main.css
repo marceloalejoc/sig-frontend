@@ -84,6 +84,7 @@ html, body {
 .modal-content .justify {
   text-align: justify;
 }
+[type="checkbox"]:not(:checked), [type="checkbox"]:checked,
 [type="radio"]:not(:checked), [type="radio"]:checked {
     left: auto;
     opacity: 1;
@@ -292,4 +293,12 @@ img.circle.macx {
   text-align: right;
   font-size: 10px;
   font-weight: bold;
+}
+
+.leaflet-bottom.leaflet-left {
+  margin-bottom: 16px;
+}
+.leaflet-bottom.leaflet-left .leaflet-control-custom {
+  margin-left: 2px;
+  margin-bottom: 0;
 }
