@@ -1,15 +1,15 @@
 {
   "development": {
     "name": "development",
-    "version": "1.0.3",
-    "localizaApi": "//192.168.3.33/back",
+    "version": "1.1.0",
+    "localizaApi": "//192.168.122.101:3000",
     "localizaApiVersion": "/api/v1",
     "color": "eee"
   },
   "production": {
     "name": "production",
-    "version": "1.0",
-    "localizaApi": "//192.168.122.4/localiza-api",
+    "version": "1.1.0",
+    "localizaApi": "//sig.macx.tk/sig",
     "localizaApiVersion": "/api/v1",
     "color": "eee"
   }
