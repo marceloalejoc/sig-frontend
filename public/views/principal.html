@@ -200,8 +200,8 @@
       <ul class="collection">
         <li class="collection-item avatar" ng-repeat="user in m.dato.usuarios">
           <div class="text-center">
-            <img ng-if="!user.img" class="circle" alt="" src="img/png/position_marker.png">
-            <img ng-if="user.img" class="circle" alt="" src="{{user.img}}">
+            <img ng-if="!user.img" class="circle" alt="" ng-src="img/png/position_marker.png">
+            <img ng-if="user.img" class="circle" alt="" ng-src="{{user.img}}">
           </div>
           <span class="title">{{ user.usuario }}</span>
           <p>{{user.nombre}} {{user.ap_paterno}}</p>
@@ -226,7 +226,7 @@
         <h5>Información de {{m.dato.usInfo.usuario}}</h5>
           <div class="collection-item avatar">
             <div class="text-center">
-              <img height="48" ng-if="m.dato.usInfo.img" alt="" src="{{m.dato.usInfo.img}}">
+              <img height="48" ng-if="m.dato.usInfo.img" alt="" ng-src="{{m.dato.usInfo.img}}">
             </div>
             <div class="title"><label>Nombres: </label><br>{{m.dato.usInfo.nombre}} {{m.dato.usInfo.ap_paterno}} {{m.dato.usInfo.ap_materno}}</div>
             <div ng-if="m.dato.usInfo.descripcion"><label>Descripción del negocio: </label><br>{{m.dato.usInfo.descripcion}}</div>
@@ -250,7 +250,7 @@
         <h4>Información del usuario</h4>
         <div><label>Usuario: </label><span class="title">{{m.dato.usInfo.usuario}}</span></div>
         <div><label>Nombre: </label>{{m.dato.usInfo.nombre}} {{m.dato.usInfo.ap_paterno}} {{m.dato.usInfo.ap_materno}}</div>
-        <div ng-if="m.dato.usInfo.img"><label>Marcador: </label><img src="{{m.dato.usInfo.img}}"/></div>
+        <div ng-if="m.dato.usInfo.img"><label>Marcador: </label><img ng-src="{{m.dato.usInfo.img}}"/></div>
         <div ng-if="m.dato.usInfo.descripcion"><label>Descripción del negocio: </label>{{m.dato.usInfo.descripcion}}</div>
         <div ng-if="m.dato.usInfo.dia"><label>Fecha: </label>{{m.dato.usInfo.dia}}-{{m.dato.usInfo.mes}}-{{m.dato.usInfo.ano}}</div>
         <div ng-if="m.dato.usInfo.email"><label>Email: </label>{{m.dato.usInfo.email}}</div>
@@ -332,7 +332,7 @@
         <ul class="collection">
           <li class="avatar">
             <div class="text-center">
-              <img ng-if="m.dato.daInfo.img" class="circle" alt="" src="{{m.dato.daInfo.img}}">
+              <img ng-if="m.dato.daInfo.img" class="circle" alt="" ng-src="{{m.dato.daInfo.img}}">
             </div>
             <div class="title"><label>Pedido a: </label> {{m.dato.daInfo.para}}</div>
             <div ng-if="m.dato.daInfo.nombres"><label>Nombres: </label> {{m.dato.daInfo.nombres}}</div>
@@ -371,7 +371,7 @@
           </div><br>
           <div class="input-field col s12 m6">
             <i class="mdi-social-person-outline prefix"></i>
-            <input class="validate" id="email" type="email" name="email" value="{{m.session.email}}" >
+            <input class="validate" id="email" type="email" name="email" ng-model="m.session.email" >
             <label for="email" data-error="No es válido" data-success="Ok" class="center-align">Correo electrónico</label>
           </div><br>
           <div class="input-field col s12 m12">
@@ -386,7 +386,7 @@
               <div><label>Cantidad: </label> <input type="number" id="cantidad" name="cantidad" ng-model="prod.pcant" style="width:50px"/></div>
               <div><label>Detalle: </label> {{prod.detalle}}</div>
               <div class="text-center right">
-                <img width="64" height="64" class="circle" alt="" src="{{prod.imagen}}">
+                <img width="64" height="64" class="circle" alt="" ng-src="{{prod.imagen}}">
               </div>
               <div><label>Precio: </label> {{prod.precio}}</div>
               <div><label>Total: </label> {{prod.pcant * prod.precio}}</div>
@@ -416,7 +416,7 @@
         <ul class="collection">
           <li class="collection-item avatar" ng-repeat="prod in m.dato.productos">
               <div class="text-center">
-                <img class="circle" alt="" src="{{prod.imagen}}">
+                <img class="circle" alt="" ng-src="{{prod.imagen}}">
               </div>
             <div><label>Código: </label> {{prod.codigo}}</div>
             <div><label>Producto: </label> {{prod.nombre}}</div>
@@ -443,7 +443,7 @@
         <ul class="collection">
           <li class="collection-item avatar" ng-repeat="prod in m.dato.productos">
               <div class="text-center">
-                <img class="circle" alt="" src="{{prod.imagen}}">
+                <img class="circle" alt="" ng-src="{{prod.imagen}}">
               </div>
             <div><label>Código: </label> {{prod.codigo}}</div>
             <div><label>Producto: </label> {{prod.nombre}}</div>
@@ -517,8 +517,8 @@
         <ul class="collection">
           <li class="collection-item avatar" ng-repeat="user in grupo.usuarios">
             <div class="text-center">
-              <img ng-if="!user.img" class="circle" alt="" src="img/png/position_marker.png">
-              <img ng-if="user.img" class="circle" alt="" src="{{user.img}}">
+              <img ng-if="!user.img" class="circle" alt="" ng-src="img/png/position_marker.png">
+              <img ng-if="user.img" class="circle" alt="" ng-src="{{user.img}}">
             </div>
             <span class="title">{{ user.usuario }}</span>
             <p>{{user.nombre}} {{user.ap_paterno}}</p>
@@ -576,7 +576,7 @@
             <div class="input-field col s12 m4">
               <i></i>
               <input class="validate" id="nombre" type="text" name="nombre" length="30" ng-model="m.dato.usInfo.nombre">
-              <label for="nombre" data-error="No es válido" data-success="Ok">Nombres</label>
+              <label for="nombre" data-error="No es válido" data-success="Ok">Nombre(s)</label>
             </div>
             <div class="input-field col s12 m4">
               <i></i>
@@ -683,7 +683,7 @@
               <label>Marcador predefinido</label>
             </div>
             <div class="input-field col s2 m1">
-              <img style="height:32px;width:32px;" src="{{m.dato.usInfo.img}}">
+              <img style="height:32px;width:32px;" ng-src="{{m.dato.usInfo.img}}">
             </div>
             <div>...</div>
             <hr>
