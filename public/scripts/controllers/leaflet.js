@@ -594,9 +594,9 @@ angular.module('localizaFrontendApp')
       if(pedido.estado) {
         marcador.message+= '<div class="detalle">Estado: '+pedido.estado+'</div>';
       }
-      marcador.message+= '<div class="fecha">'+pedido.fecha+' '+pedido.hora+'</div>';
       marcador.message+= '<a class="btn-flat cyan-text" onclick="jApi_chatPedido(\'pedido\')"><i class="material-icons">message</i></a>'
       //marcador.message+= '<a class="btn-flat blue-text" onclick="jApi_pedidoUsuario(pedido)"><i class="material-icons">add_shopping_cart</i></a>'
+      marcador.message+= '<div class="fecha">'+pedido.fecha+' '+pedido.hora+'</div>';
       JDatos.pedido = pedido;
       marcador.message+= '</div>';
       marcador.lat = pedido.lat;

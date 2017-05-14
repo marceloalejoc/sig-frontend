@@ -391,6 +391,7 @@ angular.module('localizaFrontendApp')
 
         $q.all(promises).then(function(response) {
           $scope.m.dato.mensajes = response[0].data;
+
           //mensajes.innerHTML = "";
           for (var id in $scope.m.dato.mensajes) {
             var fecha = $scope.m.dato.mensajes[id].fecha.substring(0,10);
